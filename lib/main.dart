@@ -1,43 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'dart:async';
 import 'package:easyping/easyping.dart';
-import 'package:flutter/widgets.dart';
-import 'dart:io';
+import 'package:si_netspeed/netspeed_styles.dart';
+import 'package:si_netspeed/netspeed_globals.dart';
 
-Size? gss = null;
-
- TextStyle config_title_style = TextStyle(
-    fontSize: 32.0,
-    fontWeight: FontWeight.w900,
-    letterSpacing: 1,
-    fontFamily: 'MontserratSubrayada');
- TextStyle config_dom_style = TextStyle(
-    fontSize: 26.0,
-    color: Colors.white,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 1,
-    fontFamily: 'MontserratSubrayada');
-
- TextStyle config_desc_style = TextStyle(
-    fontSize: 18.0,
-    color: Colors.white,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 1,
-    fontFamily: 'MontserratSubrayada');
-
-TextStyle app_title_style = TextStyle(
-    fontSize: gss!.width * .06,
-    fontWeight: FontWeight.w900,
-    letterSpacing: 1,
-    fontFamily: 'MontserratSubrayada');
-BorderSide tborderside =
-BorderSide(width: 1.0, color: Colors.white, style: BorderStyle.solid);
-
-List<double> zero_result_history = [];
-// set user agreed checkbox value outside of rebuild
-bool? user_has_ever_agreed = false;
-String custom_ping_host = "www.google.com";
 
 void main() async {
   print("Flutter main init");
@@ -47,13 +15,12 @@ void main() async {
 class NetSpeedApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'NetSpeed',
+      title: 'SI NetSpeed',
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.white70,
       ),
       home: NetDiagConfig(),
-      // NetDiagHome(),
     );
   }
 }
@@ -91,15 +58,6 @@ class Speed_Timer_Img extends StatelessWidget {
         ));
   }
 }
-
-Future<double> _call_ping(String thost) async {
-  print("Init ping" + thost);
-  double ret_ping_time = await ping(thost);
-  print("Done pinging google.com result ::: " + ret_ping_time.toString());
-  zero_result_history.add(ret_ping_time);
-  return ret_ping_time;
-}
-
 
 class NetDiagConfig extends StatefulWidget {
   _NetDiagConfigState createState() => _NetDiagConfigState();
@@ -266,7 +224,7 @@ contentPadding: EdgeInsets.all(gss!.width*.01),
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>
-                      NetDiagHome(thost: test_domain_string,)),
+                      NetDiagTest(thost: test_domain_string,)),
                 );
               }
 
@@ -307,22 +265,25 @@ contentPadding: EdgeInsets.all(gss!.width*.01),
 }
 
 
-class NetDiagHome extends StatefulWidget {
-  NetDiagHome({Key? key, this.thost}) : super(key: key);
+
+class NetDiagTest extends StatefulWidget {
+  NetDiagTest({Key? key, this.thost}) : super(key: key);
   final String? thost;
-  _NetDiagHomeState createState() => _NetDiagHomeState();
+  _NetDiagTestState createState() => _NetDiagTestState();
 }
 
-class _NetDiagHomeState extends State<NetDiagHome> {
+class _NetDiagTestState extends State<NetDiagTest> {
 
-  bool show_menu = false;
-  bool? ping_speed_test_running;
+  bool? ping_speed_test_running = false;
 
   @override
   void initState() {
     super.initState();
-    ping_speed_test_running = false;
-    start_recurse_single_ping_updater();
+    // ping_speed_test_running = false;
+    // start_recurse_single_ping_updater();
+    if (ping_speed_test_running == false) {
+      run_single_ping_test(widget.thost);
+    }
   }
 
 
@@ -332,8 +293,8 @@ class _NetDiagHomeState extends State<NetDiagHome> {
   }
 
   double st_result = 0.0;
-
   int spt = 1;
+
   start_recurse_single_ping_updater() {
     run_single_ping_test(widget.thost);
     Future.delayed(Duration(seconds: 3), () {
@@ -343,9 +304,22 @@ class _NetDiagHomeState extends State<NetDiagHome> {
     });
   }
 
+  _call_ping(String thost, BuildContext context) async {
+    print("Init ping" + thost);
+    await ping(thost).then((ping_res)async{
+      await Future.delayed(Duration(seconds: 3), ()
+      { print("Done pinging google.com result ::: " + ping_res.toString());
+      zero_result_history.add(ping_res);
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>
+              NetDiagResults(st_result: ping_res, thost: thost,))
+      );
+      });
 
+    });
+  }
   run_single_ping_test(thost) async {
-
     setState(() {
       ping_speed_test_running = true;
     });
@@ -355,22 +329,24 @@ class _NetDiagHomeState extends State<NetDiagHome> {
     int ping_count = 0;
     double running_ping_time_count = 0;
     while (ping_count < ping_sample_size) {
-      double cp_res = await _call_ping(thost);
-      running_ping_time_count += cp_res;
-      ping_count += 1;
-    }
+      await _call_ping(thost, context);
 
-    double ping_time_avg = running_ping_time_count / ping_sample_size;
-    setState(() {
-      st_result = ping_time_avg;
-      ping_speed_test_running = false;
-    });
+      //     .then((res) {
+      //   print("call_ping res ~ " + res.toString());
+      //   running_ping_time_count += res;
+        ping_count += 1;
+      //
+      //
+      //   // double ping_time_avg = running_ping_time_count / ping_sample_size;
+      //   setState(() {
+      //     // st_result = ping_time_avg;
+      //     st_result = res;
+      //     ping_speed_test_running = false;
+      //   });
+      // });
+    }
   }
-
   Widget build(BuildContext context) {
-    if (gss == null) {
-      gss = MediaQuery.of(context).size;
-    }
 
 return SafeArea(
         child:  Scaffold(body:Center(
@@ -379,7 +355,7 @@ return SafeArea(
                 height: gss!.height*1.2,
                   child:
                       Container(
-                        color: ping_speed_test_running!? Colors.transparent:Colors.blueGrey[900],
+                        color: Colors.transparent,
                           width: gss!.width,
                           height: gss!.height * .95,
                           child: Stack(children: [
@@ -387,8 +363,6 @@ return SafeArea(
                                 height: gss!.height*.94,
                                 child:
                                 Column(children:[
-
-                                  ping_speed_test_running == true?
                                   Container(
                                       height: gss!.height*.94,
                                       child:
@@ -397,7 +371,7 @@ return SafeArea(
                                           Image.asset(
                                             "assets/cloud_turtle_balloon_animation_reverse_scale.gif",
                                             fit: BoxFit.cover,
-                                          ))):Container(),
+                                          ))),
                                 ])),
 
                             Container(
@@ -420,32 +394,8 @@ return SafeArea(
                                     Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
-
-                                        (ping_speed_test_running == false &&
-                                            st_result != 0.0
-                                        )
-                                            ? Container(
-                                            child: Text(
-                                              "Network Delay to host",
-                                              style: config_desc_style,
-                                            ))
-                                            : Container(),
-                                        (ping_speed_test_running == false &&
-                                            st_result != 0.0
-                                        )
-                                            ?
+                                    Container(),
                                         Container(
-                                            child: Text(
-                                              widget.thost!,
-                                              style: config_desc_style,
-                                            )):Container(),
-
-                                        (ping_speed_test_running == false &&
-                                            st_result != 0.0
-                                        )
-                                            ? Container()
-
-                                            :  Container(
                                           // height: gss!.height*.38,
                                           width: gss!.width,
                                           child:Column(children:[
@@ -470,104 +420,8 @@ return SafeArea(
                                         ),
 
                                         ])),
-                                        Container(
-                                            width: gss!.width * .77,
-                                            child: Center(
-                                                child: ping_speed_test_running == false
-                                                    ? Text(
-                                                  st_result.toString()+" ms" ??
-                                                      "",
-                                                  style: app_title_style,
-                                                )
-                                                    : Container())),
-                                        ping_speed_test_running == false?
-                                        Speed_Timer_Img(time: st_result):Container(),
+
                                         Container(height: gss!.width*.02,),
-                                        ping_speed_test_running == false?
-                                        Container(
-                                          height: gss!.height*.4,
-                                          color: Theme.of(context).canvasColor,
-                                          child: Center(child:
-                                          Column(mainAxisSize: MainAxisSize.min,
-                                              children:[
-                                              Center(child:
-                                                        GestureDetector(
-                                                          onTap: (){
-                                                            run_single_ping_test(widget.thost);
-                                                          },
-                                                          child:
-                                                    ClipRRect(
-                                                        borderRadius: BorderRadius.circular(
-                                                            gss!.width * .03
-                                                        ),
-                                                        child:
-                                                        Container(
-                                                            color:Colors.white,
-                                                            padding: EdgeInsets.all(gss!.width*.005),
-                                                            child:
-                                                            ClipRRect(
-                                                                borderRadius: BorderRadius.circular(
-                                                                    gss!.width * .03
-                                                                ),
-                                                                child:
-                                                                Container(
-                                                                    color: Colors.blueGrey[900],
-                                                                    padding: EdgeInsets.all(0.0),
-                                                                    width:gss!.width * .76,
-                                                                    height: gss!.width*.17,
-                                                                    child:
-                                                                    Center(child: Text("Run Again",
-                                                                      style: TextStyle(
-                                                                          color: Colors.white,
-                                                                          fontFamily: 'MontserratSubrayada'),
-                                                                    ),
-                                                                    )))))),
-                                                    ),
-                                        // ),
-                                                Container(height: gss!.height*.03,),
-                                                GestureDetector(
-                                                    onTap: (){
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) =>NetDiagConfig()),
-                                                      );
-                                                    },
-                                                    child:
-                                                    ClipRRect(
-                                                        borderRadius: BorderRadius.circular(
-                                                            gss!.width * .03
-                                                        ),
-                                                        child:
-                                                        Container(
-                                                            color:Colors.white,
-                                                            padding: EdgeInsets.all(gss!.width*.005),
-                                                            child:
-                                                            ClipRRect(
-                                                                borderRadius: BorderRadius.circular(
-                                                                    gss!.width * .03
-                                                                ),
-                                                                child:
-                                                                Container(
-                                                                    color: Colors.blueGrey[900],
-                                                                    padding: EdgeInsets.all(0.0),
-                                                                    width:gss!.width * .76,
-                                                                    height: gss!.width*.17,
-                                                                    child:
-                                                                    Center(child: Text("Home",
-                                                                      style: TextStyle(
-                                                                          color: Colors.white,
-                                                                          fontFamily: 'MontserratSubrayada'),
-                                                                    ),
-                                                                    ))))))
-
-
-                                              ]
-                                          )
-
-
-                                          ),):Container(),
-
-
                                       ],
                                     )))),
                             Container(
@@ -592,5 +446,191 @@ return SafeArea(
 
         ));
 
+  }
+}
+
+class NetDiagResults extends StatefulWidget {
+  NetDiagResults({Key? key, this.thost, this.st_result}) : super(key: key);
+  //test host
+  final String? thost;
+  // result of speed test
+  final double? st_result;
+  _NetDiagResultsState createState() => _NetDiagResultsState();
+}
+
+class _NetDiagResultsState extends State<NetDiagResults> {
+
+  dispose(){
+    super.dispose();
+    print("NetDiagResults dispose");
+  }
+
+
+  Widget build(BuildContext context) {
+
+    return SafeArea(
+        child:  Scaffold(body:Center(
+          child:
+          Container(
+            height: gss!.height,
+            child:
+            Container(
+                color: Colors.blueGrey[900],
+                width: gss!.width,
+                height: gss!.height * .95,
+                child: Stack(children: [
+                  Container(
+                      height: gss!.height*.95,
+                      width: gss!.width,
+                      child:
+                      Container(
+                          height: gss!.height*.94,
+                          child:
+                          Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  0,
+                                  gss!.width*.1,
+                                  0,
+                                  0
+                              ),
+                              child:
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  widget.st_result!=0.0? Column(children:[
+                                  Container(
+                                      child: Text(
+                                        "Network Delay to host",
+                                        style: config_desc_style,
+                                      )),
+                                  Container(
+                                      child: Text(
+                                        widget.thost!,
+                                        style: config_desc_style,
+                                      )),
+                                  Container(
+                                      width: gss!.width * .77,
+                                      child: Center(
+                                          child:  Text(
+                                            widget.st_result.toString()+" ms" ??
+                                                "",
+                                            style: app_title_style,
+                                          )
+                                            )),
+                                  Speed_Timer_Img(time: widget.st_result),
+                                  ]): Container(child:Center(child:Text(
+                                    "Unable to ping. Make sure your device is connected to the internet"
+                                  ))),
+                                  Container(height: gss!.width*.02,),
+                                  Container(
+                                    height: gss!.height*.4,
+                                    color: Theme.of(context).canvasColor,
+                                    child: Center(child:
+                                    Column(mainAxisSize: MainAxisSize.min,
+                                        children:[
+                                          Center(child:
+                                          GestureDetector(
+                                              onTap: (){
+                                                // run_single_ping_test(widget.thost);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder:
+                                                      (context) =>NetDiagTest(thost: widget.thost,)),
+                                                );
+                                              },
+                                              child:
+                                              ClipRRect(
+                                                  borderRadius: BorderRadius.circular(
+                                                      gss!.width * .03
+                                                  ),
+                                                  child:
+                                                  Container(
+                                                      color:Colors.white,
+                                                      padding: EdgeInsets.all(gss!.width*.005),
+                                                      child:
+                                                      ClipRRect(
+                                                          borderRadius: BorderRadius.circular(
+                                                              gss!.width * .03
+                                                          ),
+                                                          child:
+                                                          Container(
+                                                              color: Colors.blueGrey[900],
+                                                              padding: EdgeInsets.all(0.0),
+                                                              width:gss!.width * .76,
+                                                              height: gss!.width*.17,
+                                                              child:
+                                                              Center(child: Text("Run Again",
+                                                                style: TextStyle(
+                                                                    color: Colors.white,
+                                                                    fontFamily: 'MontserratSubrayada'),
+                                                              ),
+                                                              )))))),
+                                          ),
+                                          // ),
+                                          Container(height: gss!.height*.03,),
+                                          GestureDetector(
+                                              onTap: (){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) =>NetDiagConfig()),
+                                                );
+                                              },
+                                              child:
+                                              ClipRRect(
+                                                  borderRadius: BorderRadius.circular(
+                                                      gss!.width * .03
+                                                  ),
+                                                  child:
+                                                  Container(
+                                                      color:Colors.white,
+                                                      padding: EdgeInsets.all(gss!.width*.005),
+                                                      child:
+                                                      ClipRRect(
+                                                          borderRadius: BorderRadius.circular(
+                                                              gss!.width * .03
+                                                          ),
+                                                          child:
+                                                          Container(
+                                                              color: Colors.blueGrey[900],
+                                                              padding: EdgeInsets.all(0.0),
+                                                              width:gss!.width * .76,
+                                                              height: gss!.width*.17,
+                                                              child:
+                                                              Center(child: Text("Home",
+                                                                style: TextStyle(
+                                                                    color: Colors.white,
+                                                                    fontFamily: 'MontserratSubrayada'),
+                                                              ),
+                                                              ))))))
+
+
+                                        ]
+                                    )
+
+
+                                    ),)
+
+
+                                ],
+                              )))),
+                  Container(
+                      width: gss!.width,
+                      height: gss!.height*.97,
+                      child:
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Container(color: Colors.transparent),
+                          Container(
+                              width: gss!.width,
+                              color: Colors.blueGrey[900],
+                              child:Center(child:
+                              Text("SigmaInfinitus",
+                                style: TextStyle(fontFamily: 'MontserratSubrayada'),)))
+                        ],))
+                ])),
+          ),
+        )
+        ));
   }
 }
