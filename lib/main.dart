@@ -25,39 +25,6 @@ class NetSpeedApp extends StatelessWidget {
   }
 }
 
-class Speed_Timer_Img extends StatelessWidget {
-  Speed_Timer_Img({this.time});
-  final double? time;
-  @override
-  Widget build(BuildContext context) {
-    String timer_to_display = "";
-    int zl = zero_result_history.length;
-    if (zl > 2){
-      if (zero_result_history[zl-1] == 0.0
-      ){
-        return Container(child:Text("Make sure you are connected to the internet"));
-      }
-    }
-
-
-    if (time! > 0.0 && time! < 67.0){
-      timer_to_display = "assets/fast_trans_white.png";
-    }
-    else if (time! > 67.0 && time! < 133.0){
-      timer_to_display = "assets/suff_trans_white.png";
-    }
-    else if (time! > 133.0){
-      timer_to_display = "assets/slow_trans_white.png";
-    }
-    else{return Container();}
-
-    return Container(width:gss!.width,
-        height: gss!.height*.35,
-        child: Image.asset(timer_to_display,
-          fit: BoxFit.fitHeight,
-        ));
-  }
-}
 
 class NetDiagConfig extends StatefulWidget {
   _NetDiagConfigState createState() => _NetDiagConfigState();
@@ -69,21 +36,18 @@ bool term_agree = false;
 bool show_other_host_input = false;
 var dd_val= "Google";
 String test_domain_string = "www.google.com";
+bool run_multi = false;
 
+List<DropdownMenuItem> dditems = [
+  DropdownMenuItem(value:"Google",child:Text("Google",style: config_dom_style,)),
+  DropdownMenuItem(value:"Amazon",child:Text("Amazon",style: config_dom_style,)),
+  DropdownMenuItem(value:"ATT",child:Text("ATT", style: config_dom_style,)),
+  DropdownMenuItem(value:"Other Host",child:Text("Other Host", style: config_dom_style,)),
+  DropdownMenuItem(value:"Multiple",child:Text("", style: config_dom_style,)),
+];
 
   Widget build(BuildContext context) {
-    if (gss == null) {
-      gss = MediaQuery.of(context).size;
-    }
-
-
-    List<DropdownMenuItem> dditems = [
-      DropdownMenuItem(value:"Google",child:Text("Google",style: config_dom_style,)),
-      DropdownMenuItem(value:"Amazon",child:Text("Amazon",style: config_dom_style,)),
-      DropdownMenuItem(value:"ATT",child:Text("ATT", style: config_dom_style,)),
-      DropdownMenuItem(value:"Other Host",child:Text("Other Host", style: config_dom_style,)),
-    ];
-
+    gss = MediaQuery.of(context).size;
     if (custom_ping_host != test_domain_string) {
       test_domain_string = custom_ping_host;
     }
@@ -100,6 +64,9 @@ print("Test ping domain  ::: ");
           else if (test_domain_string == "www.att.com"){
         dd_val = "ATT";
       }
+          else if (test_domain_string == "multiple"){
+            dd_val = "Multiple";
+    }
               else {
         dd_val = "Other Host";
       }
@@ -114,7 +81,7 @@ print("Test ping domain  ::: ");
         body:Container(
           color: Colors.blueGrey[900],
       height: gss!.height*.97,
-      child: Column(children: <Widget>[
+      child: ListView(children: <Widget>[
         Container(
           color: Colors.blueGrey[900],
           height: gss!.height*.1,),
@@ -132,6 +99,7 @@ print("Test ping domain  ::: ");
           onChanged: (val){
             custom_ping_host = val;
             setState(() {
+              run_multi = false;
               show_other_host_input = false;
 
               if (val == "Google") {
@@ -162,20 +130,58 @@ print("Test ping domain  ::: ");
           color: Colors.blueGrey[900],
           height: gss!.height*.05,),
 
-show_other_host_input == true?
-Container(
-  width: gss!.width *.76,
-    decoration: BoxDecoration(border: Border.all(color: Colors.white,width:gss!.width*.01,style:BorderStyle.solid)),
-    child:TextField(
-      style: TextStyle(color: Colors.white),
-  onSubmitted: (val){
-        setState(() {
-          test_domain_string = val;
-          custom_ping_host = test_domain_string;
-        });
-   },
-)):Container(child:Text(test_domain_string,style: config_desc_style,)),
+        show_other_host_input == true?
+            Column(children:[
+              Container(
+                color: Colors.blueGrey[900],
+                height: gss!.height*.05,child: Center(child:
+              Text("Enter domain to ping")
+              ),),
+        Container(
+            width: gss!.width *.76,
+            decoration: BoxDecoration(border: Border.all(color: Colors.white,width:gss!.width*.01,style:BorderStyle.solid)),
+            child:TextField(
+              style: TextStyle(color: Colors.white),
+              onSubmitted: (val){
+                setState(() {
+                  test_domain_string = val;
+                  custom_ping_host = test_domain_string;
+                });
+              },
+            ))
+        ]):Container(child:Text(test_domain_string,style: config_desc_style,)),
         Container(height: gss!.height*.05,),
+        CheckboxListTile(
+          title: Text("Run multi ping test"),
+
+          value: run_multi,
+          onChanged: (newValue) {
+            setState(() {
+              run_multi = !run_multi;
+            });
+            if (run_multi == true){
+                setState(() {
+                test_domain_string = "multiple";
+                custom_ping_host = "multiple";
+                show_other_host_input = false;
+                dd_val = "Multiple";
+                });
+                }
+              if (run_multi == false){
+                test_domain_string = dd_val;
+                if (dd_val != "Other Host") {
+                  custom_ping_host = dd_val;
+                }
+                if (dd_val == "Other Host"){
+                  show_other_host_input = true;
+                }
+              }
+
+          },
+          controlAffinity: ListTileControlAffinity.trailing,
+        ),
+
+
 
         GestureDetector(
             onTap:(){
@@ -188,13 +194,13 @@ Container(
                       backgroundColor: Colors.white54,
 contentPadding: EdgeInsets.all(gss!.width*.01),
                       // title: Text('AlertDialog Title'),
-                      content: Container(
-                        color: Colors.blueGrey[900],
-                        child:Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Container(padding:EdgeInsets.all(gss!.width*.02),
-                            child:Column(children:[
+                      content:
+                            Container(
+                                color: Colors.blueGrey[900],
+                                padding:EdgeInsets.all(gss!.width*.04),
+                            child:Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children:[
                             Text('Please agree to the terms before running NetSpeed'),
                           Container(height: gss!.width*.04,),
                            GestureDetector(
@@ -213,10 +219,7 @@ contentPadding: EdgeInsets.all(gss!.width*.01),
                                          width: gss!.width * .3,
                                          child:Center(child: Text("Done"),))))
                             ),
-                              ]))
-                          ],
-                        ),
-                        ) ,
+                              ])),
                     );
                   },
                 );
@@ -224,7 +227,7 @@ contentPadding: EdgeInsets.all(gss!.width*.01),
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>
-                      NetDiagTest(thost: test_domain_string,)),
+                      NetDiagTest(thost: test_domain_string, run_multi: run_multi,)),
                 );
               }
 
@@ -267,48 +270,39 @@ contentPadding: EdgeInsets.all(gss!.width*.01),
 
 
 class NetDiagTest extends StatefulWidget {
-  NetDiagTest({Key? key, this.thost}) : super(key: key);
-  final String? thost;
+  NetDiagTest({Key? key, this.thost, this.run_multi}) : super(key: key);
+  String? thost;
+  final bool? run_multi;
   _NetDiagTestState createState() => _NetDiagTestState();
 }
 
 class _NetDiagTestState extends State<NetDiagTest> {
 
-  bool? ping_speed_test_running = false;
+  List host_list = ["www.google.com", "www.amazon.com", "www.att.com"];
+  List cached_ping_resps = [];
 
   @override
   void initState() {
     super.initState();
-    // ping_speed_test_running = false;
-    // start_recurse_single_ping_updater();
-    if (ping_speed_test_running == false) {
-      run_single_ping_test(widget.thost);
-    }
+    print("NetDiagTest init");
+     if (widget.run_multi == false){
+       _call_ping_and_push_results(widget.thost!, context);
+     }
+     if (widget.run_multi == true){
+       run_multi_ping_test(context);
+     }
   }
-
 
   dispose(){
     super.dispose();
-    print("NetDiagHome dispose");
+    print("NetDiagTest dispose");
   }
 
-  double st_result = 0.0;
-  int spt = 1;
-
-  start_recurse_single_ping_updater() {
-    run_single_ping_test(widget.thost);
-    Future.delayed(Duration(seconds: 3), () {
-      print("run single ping test no:: " + spt.toString());
-      spt += 1;
-      // run_single_ping_test();
-    });
-  }
-
-  _call_ping(String thost, BuildContext context) async {
-    print("Init ping" + thost);
+  _call_ping_and_push_results(String thost, BuildContext context) async {
+    print("Init ping ~ " + thost);
     await ping(thost).then((ping_res)async{
-      await Future.delayed(Duration(seconds: 3), ()
-      { print("Done pinging google.com result ::: " + ping_res.toString());
+      await Future.delayed(Duration(milliseconds: 1500), ()
+      { print("Ping result ::: " + ping_res.toString());
       zero_result_history.add(ping_res);
       Navigator.push(
           context,
@@ -316,39 +310,44 @@ class _NetDiagTestState extends State<NetDiagTest> {
               NetDiagResults(st_result: ping_res, thost: thost,))
       );
       });
-
     });
   }
-  run_single_ping_test(thost) async {
-    setState(() {
-      ping_speed_test_running = true;
+
+
+  _call_ping(String thost) async {
+    print("Init ping ~ " + thost);
+    await Future.delayed(Duration(seconds: host_list.indexOf(thost)),()
+    async{
+      setState(() {
+        widget.thost = thost;
+      });
+    await ping(thost).then((ping_res)async{
+      cached_ping_resps.add(ping_res);
+        print("Ping result ::: " + ping_res.toString());
+      print("all pings complete resps ~ " + cached_ping_resps.toString());
+      if (cached_ping_resps.length == host_list.length){
+       int ping_res_round = ((cached_ping_resps[0] + cached_ping_resps[1] + cached_ping_resps[2])/3).round();
+        print("calculated ping res ~ " + ping_res_round.toString());
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>
+                NetDiagResults(st_result: ping_res_round, thost: "multiple",))
+        );
+      }
+      });
     });
-
-    // keep list of ping results and end test running screen on result
-    int ping_sample_size = 1;
-    int ping_count = 0;
-    double running_ping_time_count = 0;
-    while (ping_count < ping_sample_size) {
-      await _call_ping(thost, context);
-
-      //     .then((res) {
-      //   print("call_ping res ~ " + res.toString());
-      //   running_ping_time_count += res;
-        ping_count += 1;
-      //
-      //
-      //   // double ping_time_avg = running_ping_time_count / ping_sample_size;
-      //   setState(() {
-      //     // st_result = ping_time_avg;
-      //     st_result = res;
-      //     ping_speed_test_running = false;
-      //   });
-      // });
-    }
   }
+
+  run_multi_ping_test(BuildContext context)async{
+    print("run multi ping test called");
+    host_list.forEach((th) async{
+        await _call_ping(th);
+    });
+  }
+
   Widget build(BuildContext context) {
 
-return SafeArea(
+    return SafeArea(
         child:  Scaffold(body:Center(
               child:
               Container(
@@ -375,7 +374,6 @@ return SafeArea(
                                 ])),
 
                             Container(
-
                                 height: gss!.height*.95,
                                 width: gss!.width,
                                 child:
@@ -440,12 +438,8 @@ return SafeArea(
                                   style: TextStyle(fontFamily: 'MontserratSubrayada'),)))
                               ],))
                           ])),
-
-                  ),
-        )
-
+                  ),)
         ));
-
   }
 }
 
@@ -454,7 +448,7 @@ class NetDiagResults extends StatefulWidget {
   //test host
   final String? thost;
   // result of speed test
-  final double? st_result;
+  final st_result;
   _NetDiagResultsState createState() => _NetDiagResultsState();
 }
 
@@ -487,14 +481,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                           height: gss!.height*.94,
                           child:
                           Container(
-                              padding: EdgeInsets.fromLTRB(
-                                  0,
-                                  gss!.width*.1,
-                                  0,
-                                  0
-                              ),
-                              child:
-                              Column(
+                              padding: EdgeInsets.fromLTRB(0, gss!.width*.1, 0, 0),
+                              child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   widget.st_result!=0.0? Column(children:[
@@ -518,8 +506,10 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                           )
                                             )),
                                   Speed_Timer_Img(time: widget.st_result),
-                                  ]): Container(child:Center(child:Text(
-                                    "Unable to ping. Make sure your device is connected to the internet"
+                                  ]): Container(
+                                      padding: EdgeInsets.fromLTRB(gss!.width*.04, 0.0, gss!.width*.04, gss!.width*.02),
+                                      child:Center(child:Text(
+                                    "Unable to ping. Make sure your device is connected to the internet and the chosen domain is functional."
                                   ))),
                                   Container(height: gss!.width*.02,),
                                   Container(
@@ -531,11 +521,14 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                           Center(child:
                                           GestureDetector(
                                               onTap: (){
-                                                // run_single_ping_test(widget.thost);
+                                                var set_multi = false;
+                                                if (widget.thost == "multiple"){
+                                                  set_multi = true;
+                                                }
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(builder:
-                                                      (context) =>NetDiagTest(thost: widget.thost,)),
+                                                      (context) =>NetDiagTest(thost: widget.thost, run_multi: set_multi,)),
                                                 );
                                               },
                                               child:
@@ -631,6 +624,41 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                 ])),
           ),
         )
+        ));
+  }
+}
+
+
+class Speed_Timer_Img extends StatelessWidget {
+  Speed_Timer_Img({this.time});
+  final  time;
+  @override
+  Widget build(BuildContext context) {
+    String timer_to_display = "";
+    int zl = zero_result_history.length;
+    if (zl > 2){
+      if (zero_result_history[zl-1] == 0.0
+      ){
+        return Container(child:Text("Make sure you are connected to the internet"));
+      }
+    }
+
+
+    if (time! > 0.0 && time! < 67.0){
+      timer_to_display = "assets/fast_trans_white.png";
+    }
+    else if (time! > 67.0 && time! < 133.0){
+      timer_to_display = "assets/suff_trans_white.png";
+    }
+    else if (time! > 133.0){
+      timer_to_display = "assets/slow_trans_white.png";
+    }
+    else{return Container();}
+
+    return Container(width:gss!.width,
+        height: gss!.height*.35,
+        child: Image.asset(timer_to_display,
+          fit: BoxFit.fitHeight,
         ));
   }
 }
