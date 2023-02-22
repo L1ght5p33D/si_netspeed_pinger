@@ -39,7 +39,7 @@ void didUpdateWidget(NetDiagResults oldWidget){
     if (test_table == null){
       test_table = {};
     }
-    test_table["test_"+time_slug_short] = widget.thost! + " " + widget.st_result.toString();
+    test_table["test_"+time_slug_short] = widget.thost! + " ::: " + widget.st_result.toString();
     gstorage!.setItem("test_log.json", test_table);
 
     return SafeArea(
@@ -67,7 +67,7 @@ void didUpdateWidget(NetDiagResults oldWidget){
                                           ? Column(children: [
                                         Container(
                                             child: Text(
-                                              "Network Delay to host",
+                                              "Ping to chosen host",
                                               style: config_desc_style,
                                             )),
                                         Container(

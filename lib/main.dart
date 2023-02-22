@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:netspeed_si/netdiag_config.dart';
+import 'package:netspeed_si/nsas.dart';
 
 void main() async {
   print("Flutter main init");
-  runApp(NetSpeedApp());
+  runApp(InheritedWrapper(child:NetSpeedApp()));
+
 }
 
 class NetSpeedApp extends StatelessWidget {

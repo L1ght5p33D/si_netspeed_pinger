@@ -14,7 +14,7 @@ class NetDiagTest extends StatefulWidget {
 
 class _NetDiagTestState extends State<NetDiagTest> {
 
-
+  bool init_ping = false;
   List cached_ping_resps = [];
 
   @override
@@ -36,8 +36,15 @@ class _NetDiagTestState extends State<NetDiagTest> {
 
   _call_ping_and_push_results(String thost, BuildContext context) async {
     print("Init ping ~ " + thost);
+    setState(() {
+      init_ping = true;
+    });
     await ping(thost).then((ping_res) async {
-      await Future.delayed(Duration(milliseconds: 1500), () {
+      print("ping resp ~ " + ping_res.toString());
+      setState(() {
+        init_ping = false;
+      });
+      await Future.delayed(Duration(milliseconds: 1000), () {
         print("Ping result ::: " + ping_res.toString());
         zero_result_history.add(ping_res);
         Navigator.push(
@@ -150,7 +157,8 @@ class _NetDiagTestState extends State<NetDiagTest> {
                                               width: gss!.width,
                                               child: Center(
                                                   child: Text(
-                                                    "Timing ping request to host " + show_host,
+                                                    init_ping == true?"Opening ping ...":
+                                                    "... Timing ping request to host " + show_host,
                                                     style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: gss!.width * .04,
