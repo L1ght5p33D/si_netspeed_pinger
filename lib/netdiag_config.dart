@@ -10,25 +10,25 @@ class NetDiagConfig extends StatefulWidget {
 class _NetDiagConfigState extends State<NetDiagConfig> {
   bool term_agree = false;
   bool show_other_host_input = false;
-  var dd_val = "Google";
-  String test_domain_string = "www.google.com";
+  var dd_val = "Google DNS";
+  String test_domain_string = "8.8.8.8";
   bool run_multi = false;
 
   List<DropdownMenuItem> dditems = [
     DropdownMenuItem(
-        value: "Google",
+        value: "Google DNS",
         child: Text(
           "Google",
           style: config_dom_style,
         )),
     DropdownMenuItem(
-        value: "Amazon",
+        value: "Cloudflare DNS",
         child: Text(
-          "Amazon",
+          "Cloudflare",
           style: config_dom_style,
         )),
     DropdownMenuItem(
-        value: "ATT",
+        value: "ATT DNS",
         child: Text(
           "ATT",
           style: config_dom_style,
@@ -53,17 +53,17 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
     print("Test ping domain  ::: ");
     print(test_domain_string);
 
-    if (test_domain_string == "www.google.com") {
-      dd_val = "Google";
-    } else if (test_domain_string == "www.amazon.com") {
-      dd_val = "Amazon";
-    } else if (test_domain_string == "www.att.com") {
-      dd_val = "ATT";
+    if (test_domain_string == "8.8.8.8") {
+      dd_val = "Google DNS";
+    } else if (test_domain_string == "1.1.1.1") {
+      dd_val = "Cloudflare DNS";
+    } else if (test_domain_string == "12.127.16.68") {
+      dd_val = "ATT DNS";
     } else if (test_domain_string == "multiple") {
       dd_val = "Multiple";
     } else if(run_multi != true && show_other_host_input == false) {
-      dd_val = "Google";
-      test_domain_string = "www.google.com";
+      dd_val = "Google DNS";
+      test_domain_string = "8.8.8.8";
     }
     else if (show_other_host_input == true) {
       dd_val = "Other Host";
@@ -106,14 +106,14 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                             run_multi = false;
                             show_other_host_input = false;
 
-                            if (val == "Google") {
-                              test_domain_string = "www.google.com";
+                            if (val == "Google DNS") {
+                              test_domain_string = "8.8.8.8";
                             }
-                            if (val == "Amazon") {
-                              test_domain_string = "www.amazon.com";
+                            if (val == "Cloudflare DNS") {
+                              test_domain_string = "1.1.1.1";
                             }
-                            if (val == "ATT") {
-                              test_domain_string = "www.att.com";
+                            if (val == "ATT DNS") {
+                              test_domain_string = "12.127.16.68";
                             }
                           });
                           if (val == "Other Host") {

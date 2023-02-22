@@ -13,7 +13,8 @@ class NetDiagTest extends StatefulWidget {
 }
 
 class _NetDiagTestState extends State<NetDiagTest> {
-  List host_list = ["www.google.com", "www.amazon.com", "www.att.com"];
+
+
   List cached_ping_resps = [];
 
   @override
@@ -143,7 +144,7 @@ class _NetDiagTestState extends State<NetDiagTest> {
                                                   child: Text(
                                                     "Timing ping request to host " +
                                                         widget.thost! +
-                                                        " ...",
+                                                        " ..." + host_name_list[host_list.indexOf(widget.thost)],
                                                     style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: gss!.width * .04,
