@@ -145,6 +145,19 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
     );
   }
 
+  @override
+  void initState() {
+    Future.delayed(Duration.zero,(){
+      storage.ready.then((res){
+        setState(() {
+          gstorage = storage;
+          nsas!.test_log = storage.getItem('test_log.json');
+        });
+      });
+    });
+    super.initState();
+  }
+
   InheritedWrapperState? asw;
   AppState? nsas;
   @override

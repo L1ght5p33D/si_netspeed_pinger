@@ -144,8 +144,6 @@ class Test_History extends StatefulWidget {
 }
 
 class _Test_HistoryState extends State<Test_History> {
-  final LocalStorage storage = new LocalStorage('test_log.json');
-
 
   InheritedWrapperState? asw;
   AppState? nsas;
@@ -155,6 +153,7 @@ class _Test_HistoryState extends State<Test_History> {
     Future.delayed(Duration.zero,(){
       storage.ready.then((res){
        setState(() {
+         gstorage = storage;
          nsas!.test_log = storage.getItem('test_log.json');
        });
       });

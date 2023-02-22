@@ -36,6 +36,7 @@ void didUpdateWidget(NetDiagResults oldWidget){
     String time_slug = DateTime.now().millisecondsSinceEpoch.toString();
     String time_slug_short = time_slug.substring(0, time_slug.length -4);
     Map test_table = gstorage!.getItem("test_log.json");
+
     if (test_table == null){
       test_table = {};
     }
