@@ -43,6 +43,14 @@ void didUpdateWidget(NetDiagResults oldWidget){
     test_table["test_"+time_slug_short] = widget.thost! + " ::: " + widget.st_result.toString();
     gstorage!.setItem("test_log.json", test_table);
 
+    String show_host = "";
+
+    if (host_list.contains(widget.thost)){
+      show_host = widget.thost.toString() + " " + host_name_list[host_list.indexOf(widget.thost)] ;
+    }else{
+      show_host = widget.thost!;
+    }
+
     return SafeArea(
         child: Scaffold(
             body: Center(
@@ -51,10 +59,10 @@ void didUpdateWidget(NetDiagResults oldWidget){
                 child: Container(
                     color: Colors.blueGrey[900],
                     width: gss!.width,
-                    height: gss!.height * .95,
+                    height: gss!.height ,
                     child: Stack(children: [
                       Container(
-                          height: gss!.height * .95,
+                          height: gss!.height ,
                           width: gss!.width,
                           child: Container(
                               height: gss!.height * .94,
@@ -68,12 +76,12 @@ void didUpdateWidget(NetDiagResults oldWidget){
                                           ? Column(children: [
                                         Container(
                                             child: Text(
-                                              "Ping to chosen host",
+                                              "Ping to ",
                                               style: config_desc_style,
                                             )),
                                         Container(
                                             child: Text(
-                                              widget.thost!,
+                                              show_host,
                                               style: config_desc_style,
                                             )),
                                         Container(
@@ -85,6 +93,7 @@ void didUpdateWidget(NetDiagResults oldWidget){
                                                       "",
                                                   style: app_title_style,
                                                 ))),
+                                        Container(height: gss!.height*.03,),
                                         Speed_Timer_Img(time: widget.st_result),
                                       ])
                                           : Container(
@@ -96,11 +105,9 @@ void didUpdateWidget(NetDiagResults oldWidget){
                                           child: Center(
                                               child: Text(
                                                   "Unable to ping. Make sure your device is connected to the internet and the chosen domain is functional."))),
+
+                                      Expanded(child:
                                       Container(
-                                        height: gss!.width * .02,
-                                      ),
-                                      Container(
-                                        height: gss!.height * .4,
                                         color: Theme.of(context).canvasColor,
                                         child: Center(
                                             child: Column(
@@ -145,8 +152,8 @@ void didUpdateWidget(NetDiagResults oldWidget){
                                                                             0.0),
                                                                         width: gss!.width *
                                                                             .76,
-                                                                        height: gss!.width *
-                                                                            .17,
+                                                                        height: gss!.height *
+                                                                            .08,
                                                                         child: Center(
                                                                           child: Text(
                                                                             "Run Again",
@@ -191,8 +198,8 @@ void didUpdateWidget(NetDiagResults oldWidget){
                                                                           0.0),
                                                                       width:
                                                                       gss!.width * .76,
-                                                                      height:
-                                                                      gss!.width * .17,
+                                                                      height: gss!.height *
+                                                                          .08,
                                                                       child: Center(
                                                                         child: Text(
                                                                           "Home",
@@ -204,7 +211,7 @@ void didUpdateWidget(NetDiagResults oldWidget){
                                                                         ),
                                                                       ))))))
                                                 ])),
-                                      )
+                                      ))
                                     ],
                                   )))),
                       Container(

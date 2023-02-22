@@ -158,7 +158,7 @@ class _NetDiagTestState extends State<NetDiagTest> {
                                               child: Center(
                                                   child: Text(
                                                     init_ping == true?"Opening ping ...":
-                                                    "... Timing ping request to host " + show_host,
+                                                    "Timing ping to host " + show_host,
                                                     style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: gss!.width * .04,

@@ -48,8 +48,9 @@ class _TestLogPageState extends State<TestLogPage> {
                           onTap: () {
                             gstorage!.setItem("test_log.json", {});
                             nsas!.test_log = {};
+                            asw!.update_state();
                             Navigator.of(context).pop();
-                            Navigator.of(context).pop();
+                            // Navigator.of(context).pop();
                           },
                           child: ClipRRect(
                               borderRadius:
