@@ -23,9 +23,7 @@ class _NetDiagResultsState extends State<NetDiagResults> {
 void didUpdateWidget(NetDiagResults oldWidget){
   super.didUpdateWidget(oldWidget);
 
-  String time_slug = DateTime.now().millisecondsSinceEpoch.toString();
-  String time_slug_short = time_slug.substring(0, time_slug.length -4);
-  gstorage!.setItem("test_log", {"test_"+time_slug: time_slug_short });
+
 }
 
 
@@ -35,7 +33,11 @@ void didUpdateWidget(NetDiagResults oldWidget){
   }
 
   Widget build(BuildContext context) {
-
+    String time_slug = DateTime.now().millisecondsSinceEpoch.toString();
+    String time_slug_short = time_slug.substring(0, time_slug.length -4);
+    Map test_table = gstorage!.getItem("test_log.json");
+    test_table["test_"+time_slug_short] = widget.thost! + " " + widget.st_result;
+    gstorage!.setItem("test_log.json", test_table);
 
     return SafeArea(
         child: Scaffold(

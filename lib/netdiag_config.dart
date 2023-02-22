@@ -12,18 +12,31 @@ Map tests;
   @override
   Widget build(BuildContext context) {
 
-if (tests.isNotEmpty){
-    return Container(height: gss!.height,
-    child: ListView.builder(itemBuilder: (context, idx){
-
-
-      return Container(height: gss!.height*.1,
-      child:Text(tests[tests.keys.elementAt(idx)]));
-    }));
+    if (tests == null){
+      return SafeArea(child:
+          Scaffold(
+              appBar: AppBar(),
+              body:Container(child: Text("No tests run"))));
+    }
+else {
+    return  SafeArea(child:
+    Scaffold(
+        appBar: AppBar(),
+        body:Container(height: gss!.height,
+    child: ListView.builder(
+        itemCount: tests.keys.length,
+        itemBuilder: (context, idx){
+      return
+        Padding(
+            padding: EdgeInsets.symmetric(vertical: gss!.width*.02),
+            child:
+        Container(
+          color: Colors.blueGrey[900],
+          height: gss!.height*.1,
+      child:Center(child:Text( "test " +(idx + 1).toString() +" ::: " +
+          tests[tests.keys.elementAt(idx)].toString() + "ms" ) )));
+    }))));
   }
-else{
-  return Container(child: Text("No tests run"));
-}
 }
 }
 
@@ -164,10 +177,36 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
             children: <Widget>[
               Container(
                 color: Colors.blueGrey[900],
-                height: gss!.height * .1,
+                height: gss!.height * .01,
               ),
-
+              Container(
+                height: gss!.height * .05,
+              ),
+              Container(
+                // color: Colors.red,
+                  width: gss!.width * .9,
+                  child: Text(
+                      "By clicking I agree, you agree to make internet requests to the chosen host.")),
+              CheckboxListTile(
+                title: Text("Agree"),
+                value: term_agree,
+                onChanged: (newValue) {
+                  user_has_ever_agreed = newValue;
+                  setState(() {
+                    term_agree = !term_agree;
+                  });
+                },
+                controlAffinity: ListTileControlAffinity.trailing,
+              ),
+              Container(
+                color: Colors.blueGrey[900],
+                height: gss!.height * .03,
+              ),
               Test_History(),
+              Container(
+                color: Colors.blueGrey[900],
+                height: gss!.height * .04,
+              ),
 
               ClipRRect(
                   borderRadius: BorderRadius.circular(gss!.width * .02),
@@ -337,25 +376,7 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                               child: Center(
                                 child: Text("Start NetSpeed Test"),
                               ))))),
-              Container(
-                height: gss!.height * .05,
-              ),
-              Container(
-                // color: Colors.red,
-                  width: gss!.width * .9,
-                  child: Text(
-                      "By clicking I agree, you agree to accept any liability that applies to making internet requests to the chosen host.")),
-              CheckboxListTile(
-                title: Text("Agree"),
-                value: term_agree,
-                onChanged: (newValue) {
-                  user_has_ever_agreed = newValue;
-                  setState(() {
-                    term_agree = !term_agree;
-                  });
-                },
-                controlAffinity: ListTileControlAffinity.trailing,
-              )
+
             ],
           ),
         ));
