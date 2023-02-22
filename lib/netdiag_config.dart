@@ -7,7 +7,7 @@ import 'package:localstorage/localstorage.dart';
 
 class TestLogPage extends StatelessWidget {
   TestLogPage({Key? key, required this.tests}) : super(key: key);
-  Map<String, dynamic> tests;
+  var tests;
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +140,7 @@ class _Test_HistoryState extends State<Test_History> {
         gstorage = storage;
 
         if (snapshot.data == true) {
-          Map<String, dynamic> data = storage.getItem('test_log.json');
+          var data = storage.getItem('test_log.json');
         print("got tests ~ " + data.toString());
           return
             GestureDetector(
