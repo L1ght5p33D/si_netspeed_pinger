@@ -19,7 +19,7 @@ class InheritedNSAS extends InheritedWidget {
 
   @override
   bool updateShouldNotify(InheritedNSAS oldWidget) {
-    return appstate != oldWidget.appstate;
+    return true;
   }
 }
 
@@ -43,9 +43,9 @@ class InheritedWrapper extends StatefulWidget {
 
 class InheritedWrapperState extends State<InheritedWrapper> {
 
-  void update_state() {
+  void update_logs_state(new_logs) {
     setState(() {
-      state;
+      state!.test_log = new_logs;
     });
   }
 
@@ -54,6 +54,7 @@ class InheritedWrapperState extends State<InheritedWrapper> {
   @override
   void initState() {
     state = AppState();
+    super.initState();
   }
 
   @override

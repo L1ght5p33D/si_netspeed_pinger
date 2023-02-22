@@ -47,8 +47,7 @@ bool edit_logs = false;
                       GestureDetector(
                           onTap: () {
                             gstorage!.setItem("test_log.json", {});
-                            nsas!.test_log = {};
-                            asw!.update_state();
+                            asw!.update_logs_state({});
                             Navigator.of(context).pop();
                             // Navigator.of(context).pop();
                           },
@@ -94,7 +93,7 @@ bool edit_logs = false;
         },
       );
     }
-    if (widget.tests == null){
+    if (nsas!.test_log == null){
       return SafeArea(child:
       Scaffold(
           appBar: AppBar(),
@@ -129,7 +128,7 @@ bool edit_logs = false;
             ],)),
           body:Container(height: gss!.height,
               child: ListView.builder(
-                  itemCount: widget.tests.keys.length,
+                  itemCount: nsas!.test_log.keys.length,
                   itemBuilder: (context, idx){
                     return
                       Padding(
@@ -144,7 +143,7 @@ bool edit_logs = false;
                                   children:[
                                     edit_logs == true?Icon(Icons.edit):Container(),
                               Center(child:Text( "test " +(idx + 1).toString() +" ::: " +
-                                  widget.tests[widget.tests.keys.elementAt(idx)].toString() + "ms" ) ),
+                                  nsas!.test_log[nsas!.test_log.keys.elementAt(idx)].toString() + "ms" ) ),
 
                                     edit_logs == true?GestureDetector(
                                       onTap: (){
@@ -195,7 +194,7 @@ onTap:(){
 Navigator.push(
 context,
 MaterialPageRoute(
-builder: (context) => TestLogPage(tests: nsas!.test_log)),
+builder: (context) => TestLogPage()),
 );
 },
 child: ClipRRect(
