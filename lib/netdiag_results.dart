@@ -36,7 +36,10 @@ void didUpdateWidget(NetDiagResults oldWidget){
     String time_slug = DateTime.now().millisecondsSinceEpoch.toString();
     String time_slug_short = time_slug.substring(0, time_slug.length -4);
     Map test_table = gstorage!.getItem("test_log.json");
-    test_table["test_"+time_slug_short] = widget.thost! + " " + widget.st_result;
+    if (test_table == null){
+      test_table = {};
+    }
+    test_table["test_"+time_slug_short] = widget.thost! + " " + widget.st_result.toString();
     gstorage!.setItem("test_log.json", test_table);
 
     return SafeArea(

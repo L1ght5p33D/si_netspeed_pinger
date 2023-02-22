@@ -7,21 +7,102 @@ import 'package:localstorage/localstorage.dart';
 
 class TestLogPage extends StatelessWidget {
   TestLogPage({Key? key, required this.tests}) : super(key: key);
-Map tests;
+  Map<String, dynamic> tests;
 
   @override
   Widget build(BuildContext context) {
-
+    show_delete_dialog() {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white54,
+            contentPadding: EdgeInsets.all(gss!.width * .01),
+            // title: Text('AlertDialog Title'),
+            content: Container(
+                color: Colors.blueGrey[900],
+                padding: EdgeInsets.all(gss!.width * .04),
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                          'Are you sure you want to clear the test log?'),
+                      Container(
+                        height: gss!.width * .04,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            gstorage!.setItem("test_log.json", {});
+                            Navigator.of(context).pop();
+                          },
+                          child: ClipRRect(
+                              borderRadius:
+                              BorderRadius.circular(4.0),
+                              child: Container(
+                                  padding: EdgeInsets.all(2.0),
+                                  color: Colors.white,
+                                  child: Container(
+                                      color:
+                                      Colors.blueGrey[800],
+                                      height:
+                                      gss!.height * .047,
+                                      width: gss!.width * .3,
+                                      child: Center(
+                                        child: Text("Yes"),
+                                      ))))),
+                      Container(
+                        height: gss!.height * .05,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: ClipRRect(
+                              borderRadius:
+                              BorderRadius.circular(4.0),
+                              child: Container(
+                                  padding: EdgeInsets.all(2.0),
+                                  color: Colors.white,
+                                  child: Container(
+                                      color:
+                                      Colors.blueGrey[800],
+                                      height:
+                                      gss!.height * .047,
+                                      width: gss!.width * .3,
+                                      child: Center(
+                                        child: Text("No"),
+                                      ))))),
+                    ])),
+          );
+        },
+      );
+    }
     if (tests == null){
       return SafeArea(child:
           Scaffold(
               appBar: AppBar(),
-              body:Container(child: Text("No tests run"))));
+              body: Padding(
+              padding: EdgeInsets.symmetric(vertical: gss!.width*.02),
+    child:
+    Container(
+    color: Colors.blueGrey[900],
+    height: gss!.height*.1,
+    child:Center(child:Text( "No Tests Run" ) )))));
     }
 else {
     return  SafeArea(child:
     Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title:Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            GestureDetector(
+              onTap: (){
+                show_delete_dialog();
+              },
+              child: Icon(Icons.delete_sweep_outlined),)
+
+          ],)),
         body:Container(height: gss!.height,
     child: ListView.builder(
         itemCount: tests.keys.length,
@@ -91,6 +172,8 @@ class _Test_HistoryState extends State<Test_History> {
   }
 }
 
+
+
 class NetDiagConfig extends StatefulWidget {
   _NetDiagConfigState createState() => _NetDiagConfigState();
 }
@@ -137,6 +220,95 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
         )),
   ];
 
+  show_hostempty_dialog() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white54,
+          contentPadding: EdgeInsets.all(gss!.width * .01),
+          // title: Text('AlertDialog Title'),
+          content: Container(
+              color: Colors.blueGrey[900],
+              padding: EdgeInsets.all(gss!.width * .04),
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                        'Please enter a hostname to test other host'),
+                    Container(
+                      height: gss!.width * .04,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: ClipRRect(
+                            borderRadius:
+                            BorderRadius.circular(4.0),
+                            child: Container(
+                                padding: EdgeInsets.all(2.0),
+                                color: Colors.white,
+                                child: Container(
+                                    color:
+                                    Colors.blueGrey[800],
+                                    height:
+                                    gss!.height * .047,
+                                    width: gss!.width * .3,
+                                    child: Center(
+                                      child: Text("Done"),
+                                    ))))),
+                  ])),
+        );
+      },
+    );
+  }
+
+  show_terms_dialog(){
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white54,
+          contentPadding: EdgeInsets.all(gss!.width * .01),
+          // title: Text('AlertDialog Title'),
+          content: Container(
+              color: Colors.blueGrey[900],
+              padding: EdgeInsets.all(gss!.width * .04),
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                        'Please agree to the terms before running NetSpeed'),
+                    Container(
+                      height: gss!.width * .04,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: ClipRRect(
+                            borderRadius:
+                            BorderRadius.circular(4.0),
+                            child: Container(
+                                padding: EdgeInsets.all(2.0),
+                                color: Colors.white,
+                                child: Container(
+                                    color:
+                                    Colors.blueGrey[800],
+                                    height:
+                                    gss!.height * .047,
+                                    width: gss!.width * .3,
+                                    child: Center(
+                                      child: Text("Done"),
+                                    ))))),
+                  ])),
+        );
+      },
+    );
+  }
 
 
   Widget build(BuildContext context) {
@@ -273,13 +445,18 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                           test_domain_string = val;
                         });
                       },
+                      onChanged: (val){
+                      setState(() {
+                      test_domain_string = val;
+                      });
+                      },
                     ))
               ])
                   : Container(
-                  child: Text(
+                  child: Center(child:Text(
                     test_domain_string,
                     style: config_desc_style,
-                  )),
+                  ))),
               Container(
                 height: gss!.height * .05,
               ),
@@ -299,61 +476,29 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                   }
                   if (run_multi == false) {
                     test_domain_string = dd_val;
-                    if (dd_val != "Other Host") {
-                    }
+
                     if (dd_val == "Other Host") {
                       show_other_host_input = true;
+
                     }
+
                   }
+
                 },
                 controlAffinity: ListTileControlAffinity.trailing,
+              ),
+              Container(
+                height: gss!.height * .05,
               ),
               GestureDetector(
                   onTap: () {
                     if (term_agree == false && user_has_ever_agreed == false) {
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false, // user must tap button!
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: Colors.white54,
-                            contentPadding: EdgeInsets.all(gss!.width * .01),
-                            // title: Text('AlertDialog Title'),
-                            content: Container(
-                                color: Colors.blueGrey[900],
-                                padding: EdgeInsets.all(gss!.width * .04),
-                                child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                          'Please agree to the terms before running NetSpeed'),
-                                      Container(
-                                        height: gss!.width * .04,
-                                      ),
-                                      GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(4.0),
-                                              child: Container(
-                                                  padding: EdgeInsets.all(2.0),
-                                                  color: Colors.white,
-                                                  child: Container(
-                                                      color:
-                                                      Colors.blueGrey[800],
-                                                      height:
-                                                      gss!.height * .047,
-                                                      width: gss!.width * .3,
-                                                      child: Center(
-                                                        child: Text("Done"),
-                                                      ))))),
-                                    ])),
-                          );
-                        },
-                      );
-                    } else {
+                     show_terms_dialog();
+                    }
+                    else  if (dd_val == "Other Host" && test_domain_string == ""){
+                      show_hostempty_dialog();
+                    }
+                    else {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -376,6 +521,11 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                               child: Center(
                                 child: Text("Start NetSpeed Test"),
                               ))))),
+
+              Container(
+                color: Colors.blueGrey[900],
+                height: gss!.height * .1,
+              ),
 
             ],
           ),

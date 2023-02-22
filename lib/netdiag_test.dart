@@ -88,6 +88,14 @@ class _NetDiagTestState extends State<NetDiagTest> {
   }
 
   Widget build(BuildContext context) {
+
+    String show_host = "";
+
+    if (host_list.contains(widget.thost)){
+      show_host = widget.thost.toString() + " ... " + host_name_list[host_list.indexOf(widget.thost)] ;
+    }else{
+      show_host = widget.thost!;
+    }
     return SafeArea(
         child: Scaffold(
             body: Center(
@@ -142,9 +150,7 @@ class _NetDiagTestState extends State<NetDiagTest> {
                                               width: gss!.width,
                                               child: Center(
                                                   child: Text(
-                                                    "Timing ping request to host " +
-                                                        widget.thost! +
-                                                        " ..." + host_name_list[host_list.indexOf(widget.thost)],
+                                                    "Timing ping request to host " + show_host,
                                                     style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: gss!.width * .04,
