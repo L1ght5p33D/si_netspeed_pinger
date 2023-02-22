@@ -43,10 +43,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Extra ignorables
-ios/
-android/
-web/
-linux/
-macos/
-windows/
+/ios
+/android
+/web
+/linux
+/macos
+/windows
