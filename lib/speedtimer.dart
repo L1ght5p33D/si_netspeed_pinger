@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
 
 class Speed_Timer_Img extends StatelessWidget {

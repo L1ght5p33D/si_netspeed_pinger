@@ -3,7 +3,6 @@ import 'package:netspeed_si/netdiag_test.dart';
 import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/speedtimer.dart';
 import 'package:netspeed_si/netdiag_config.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
 
 class NetDiagResults extends StatefulWidget {
@@ -11,7 +10,6 @@ class NetDiagResults extends StatefulWidget {
 
   //test host
   final String? thost;
-
   // result of speed test
   final st_result;
 
@@ -19,12 +17,6 @@ class NetDiagResults extends StatefulWidget {
 }
 
 class _NetDiagResultsState extends State<NetDiagResults> {
-
-void didUpdateWidget(NetDiagResults oldWidget){
-  super.didUpdateWidget(oldWidget);
-
-
-}
 
 
   dispose() {

@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
 import 'package:netspeed_si/netdiag_test.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:netspeed_si/nsas.dart';
-import 'package:netspeed_si/tests_log.dart';
-
-
+import 'package:netspeed_si/dialogs.dart';
+import 'package:netspeed_si/test_history.dart';
 
 class NetDiagConfig extends StatefulWidget {
   _NetDiagConfigState createState() => _NetDiagConfigState();
@@ -21,128 +19,7 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
   String test_domain_string = "8.8.8.8";
   bool run_multi = false;
 
-  List<DropdownMenuItem> dditems = [
-    DropdownMenuItem(
-        value: "Google DNS",
-        child: Text(
-          "Google",
-          style: config_dom_style,
-        )),
-    DropdownMenuItem(
-        value: "Cloudflare DNS",
-        child: Text(
-          "Cloudflare",
-          style: config_dom_style,
-        )),
-    DropdownMenuItem(
-        value: "ATT DNS",
-        child: Text(
-          "ATT",
-          style: config_dom_style,
-        )),
-    DropdownMenuItem(
-        value: "Other Host",
-        child: Text(
-          "Other Host",
-          style: config_dom_style,
-        )),
-    DropdownMenuItem(
-        value: "Multiple",
-        child: Text(
-          "",
-          style: config_dom_style,
-        )),
-  ];
 
-  show_hostempty_dialog() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white54,
-          contentPadding: EdgeInsets.all(gss!.width * .01),
-          // title: Text('AlertDialog Title'),
-          content: Container(
-              color: Colors.blueGrey[900],
-              padding: EdgeInsets.all(gss!.width * .04),
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                        'Please enter a hostname to test other host'),
-                    Container(
-                      height: gss!.width * .04,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: ClipRRect(
-                            borderRadius:
-                            BorderRadius.circular(4.0),
-                            child: Container(
-                                padding: EdgeInsets.all(2.0),
-                                color: Colors.white,
-                                child: Container(
-                                    color:
-                                    Colors.blueGrey[800],
-                                    height:
-                                    gss!.height * .047,
-                                    width: gss!.width * .3,
-                                    child: Center(
-                                      child: Text("Done"),
-                                    ))))),
-                  ])),
-        );
-      },
-    );
-  }
-
-  show_terms_dialog(){
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white54,
-          contentPadding: EdgeInsets.all(gss!.width * .01),
-          // title: Text('AlertDialog Title'),
-          content: Container(
-              color: Colors.blueGrey[900],
-              padding: EdgeInsets.all(gss!.width * .04),
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                        'Please agree to the terms before running NetSpeed'),
-                    Container(
-                      height: gss!.width * .04,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: ClipRRect(
-                            borderRadius:
-                            BorderRadius.circular(4.0),
-                            child: Container(
-                                padding: EdgeInsets.all(2.0),
-                                color: Colors.white,
-                                child: Container(
-                                    color:
-                                    Colors.blueGrey[800],
-                                    height:
-                                    gss!.height * .047,
-                                    width: gss!.width * .3,
-                                    child: Center(
-                                      child: Text("Done"),
-                                    ))))),
-                  ])),
-        );
-      },
-    );
-  }
 
   @override
   void initState() {
@@ -359,10 +236,10 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
               GestureDetector(
                   onTap: () {
                     if (term_agree == false && user_has_ever_agreed == false) {
-                     show_terms_dialog();
+                     show_terms_dialog(context);
                     }
                     else  if (dd_val == "Other Host" && test_domain_string == ""){
-                      show_hostempty_dialog();
+                      show_hostempty_dialog(context);
                     }
                     else {
                       Navigator.push(

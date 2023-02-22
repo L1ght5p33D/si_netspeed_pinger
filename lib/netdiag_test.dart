@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easyping/easyping.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
-import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/netdiag_results.dart';
 
 class NetDiagTest extends StatefulWidget {

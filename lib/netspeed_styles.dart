@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:netspeed_si/netspeed_globals.dart';
 
-Size? gss = null;
 
 TextStyle config_title_style = TextStyle(
     fontSize: 32.0,

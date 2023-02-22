@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:netspeed_si/nsas.dart';
-import 'package:netspeed_si/netspeed_styles.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
 
 
@@ -240,92 +238,5 @@ String? input_desc_val;
   }
 }
 
-class Test_History extends StatefulWidget {
-  const Test_History({Key? key}) : super(key: key);
 
-  @override
-  _Test_HistoryState createState() => _Test_HistoryState();
-}
 
-class _Test_HistoryState extends State<Test_History> {
-
-  InheritedWrapperState? asw;
-  AppState? nsas;
-
-  @override
-  void initState() {
-    Future.delayed(Duration.zero,(){
-      storage.ready.then((res){
-       setState(() {
-         gstorage = storage;
-         nsas!.test_log = storage.getItem('test_log.json');
-       });
-      });
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    asw = InheritedWrapper.of(context);
-    nsas = asw!.state!;
-
-return GestureDetector(
-onTap:(){
-Navigator.push(
-context,
-MaterialPageRoute(
-builder: (context) => TestLogPage()),
-);
-},
-child: ClipRRect(
-borderRadius: BorderRadius.circular(4.0),
-child: Container(
-padding: EdgeInsets.all(2.0),
-color: Colors.white,
-child: Container(
-color: Colors.blueGrey[800],
-height: gss!.height * .09,
-width: gss!.width * .77,
-child: Center(
-child: Text("Test Log"),
-)))));
-  }
-}
-
-// return FutureBuilder(
-// future: storage.ready,
-// builder: (BuildContext context, snapshot) {
-// gstorage = storage;
-//
-// if (snapshot.data == true) {
-// var data = storage.getItem('test_log.json');
-// print("got tests ~ " + data.toString());
-// return
-// GestureDetector(
-// onTap:(){
-// Navigator.push(
-// context,
-// MaterialPageRoute(
-// builder: (context) => TestLogPage(tests: data)),
-// );
-// },
-// child: ClipRRect(
-// borderRadius: BorderRadius.circular(4.0),
-// child: Container(
-// padding: EdgeInsets.all(2.0),
-// color: Colors.white,
-// child: Container(
-// color: Colors.blueGrey[800],
-// height: gss!.height * .09,
-// width: gss!.width * .77,
-// child: Center(
-// child: Text("Test Log"),
-// )))));
-//
-// } else {
-// return Container();
-// }
-// },
-// );
