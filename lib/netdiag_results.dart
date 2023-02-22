@@ -3,6 +3,8 @@ import 'package:netspeed_si/netdiag_test.dart';
 import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/speedtimer.dart';
 import 'package:netspeed_si/netdiag_config.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:netspeed_si/netspeed_globals.dart';
 
 class NetDiagResults extends StatefulWidget {
   NetDiagResults({Key? key, this.thost, this.st_result}) : super(key: key);
@@ -17,12 +19,24 @@ class NetDiagResults extends StatefulWidget {
 }
 
 class _NetDiagResultsState extends State<NetDiagResults> {
+
+void didUpdateWidget(NetDiagResults oldWidget){
+  super.didUpdateWidget(oldWidget);
+
+  String time_slug = DateTime.now().millisecondsSinceEpoch.toString();
+  String time_slug_short = time_slug.substring(0, time_slug.length -4);
+  gstorage!.setItem("test_log", {"test_"+time_slug: time_slug_short });
+}
+
+
   dispose() {
     super.dispose();
     print("NetDiagResults dispose");
   }
 
   Widget build(BuildContext context) {
+
+
     return SafeArea(
         child: Scaffold(
             body: Center(

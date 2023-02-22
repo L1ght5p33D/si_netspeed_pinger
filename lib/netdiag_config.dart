@@ -2,12 +2,89 @@ import 'package:flutter/material.dart';
 import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
 import 'package:netspeed_si/netdiag_test.dart';
+import 'package:localstorage/localstorage.dart';
+
+
+class TestLogPage extends StatelessWidget {
+  TestLogPage({Key? key, required this.tests}) : super(key: key);
+Map tests;
+
+  @override
+  Widget build(BuildContext context) {
+
+if (tests.isNotEmpty){
+    return Container(height: gss!.height,
+    child: ListView.builder(itemBuilder: (context, idx){
+
+
+      return Container(height: gss!.height*.1,
+      child:Text(tests[tests.keys.elementAt(idx)]));
+    }));
+  }
+else{
+  return Container(child: Text("No tests run"));
+}
+}
+}
+
+class Test_History extends StatefulWidget {
+  const Test_History({Key? key}) : super(key: key);
+
+  @override
+  _Test_HistoryState createState() => _Test_HistoryState();
+}
+
+class _Test_HistoryState extends State<Test_History> {
+  final LocalStorage storage = new LocalStorage('test_log.json');
+
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: storage.ready,
+      builder: (BuildContext context, snapshot) {
+        gstorage = storage;
+
+        if (snapshot.data == true) {
+          Map<String, dynamic> data = storage.getItem('test_log.json');
+        print("got tests ~ " + data.toString());
+          return
+            GestureDetector(
+          onTap:(){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TestLogPage(tests: data)),
+            );
+          },
+            child: ClipRRect(
+        borderRadius: BorderRadius.circular(4.0),
+        child: Container(
+        padding: EdgeInsets.all(2.0),
+        color: Colors.white,
+        child: Container(
+        color: Colors.blueGrey[800],
+        height: gss!.height * .09,
+        width: gss!.width * .77,
+        child: Center(
+        child: Text("Test Log"),
+        )))));
+
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
 
 class NetDiagConfig extends StatefulWidget {
   _NetDiagConfigState createState() => _NetDiagConfigState();
 }
 
 class _NetDiagConfigState extends State<NetDiagConfig> {
+
+
   bool term_agree = false;
   bool show_other_host_input = false;
   var dd_val = "Google DNS";
@@ -46,6 +123,8 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
           style: config_dom_style,
         )),
   ];
+
+
 
   Widget build(BuildContext context) {
     gss = MediaQuery.of(context).size;
@@ -87,6 +166,9 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                 color: Colors.blueGrey[900],
                 height: gss!.height * .1,
               ),
+
+              Test_History(),
+
               ClipRRect(
                   borderRadius: BorderRadius.circular(gss!.width * .02),
                   child: Container(
@@ -189,7 +271,7 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
               ),
               GestureDetector(
                   onTap: () {
-                    if (term_agree != true && user_has_ever_agreed == false) {
+                    if (term_agree == false && user_has_ever_agreed == false) {
                       showDialog<void>(
                         context: context,
                         barrierDismissible: false, // user must tap button!
