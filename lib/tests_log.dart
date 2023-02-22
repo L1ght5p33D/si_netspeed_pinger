@@ -7,15 +7,15 @@ import 'package:netspeed_si/netspeed_globals.dart';
 
 
 class TestLogPage extends StatefulWidget {
-  TestLogPage({Key? key, required this.tests}) : super(key: key);
+  TestLogPage({Key? key}) : super(key: key);
 
-  Map tests;
+
   @override
   _TestLogPageState createState() => _TestLogPageState();
 }
 
 class _TestLogPageState extends State<TestLogPage> {
-
+bool edit_logs = false;
   InheritedWrapperState? asw;
   AppState? nsas;
   @override
@@ -109,11 +109,19 @@ class _TestLogPageState extends State<TestLogPage> {
     else {
       return  SafeArea(child:
       Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            setState(() {
+              edit_logs = !edit_logs;
+            });
+          },
+          child: edit_logs == false? Icon(Icons.edit_off ): Icon(Icons.close),),
           appBar: AppBar(title:Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               GestureDetector(
                 onTap: (){
+
                   show_delete_dialog();
                 },
                 child: Icon(Icons.delete_sweep_outlined),)
@@ -130,8 +138,22 @@ class _TestLogPageState extends State<TestLogPage> {
                           Container(
                               color: Colors.blueGrey[900],
                               height: gss!.height*.1,
-                              child:Center(child:Text( "test " +(idx + 1).toString() +" ::: " +
-                                  widget.tests[widget.tests.keys.elementAt(idx)].toString() + "ms" ) )));
+                              child:
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children:[
+                                    edit_logs == true?Icon(Icons.edit):Container(),
+                              Center(child:Text( "test " +(idx + 1).toString() +" ::: " +
+                                  widget.tests[widget.tests.keys.elementAt(idx)].toString() + "ms" ) ),
+
+                                    edit_logs == true?GestureDetector(
+                                      onTap: (){
+
+
+                                      },
+                                    child:Icon(Icons.delete_outline_outlined)): Container()
+                                  ])
+                    ));
                   }))));
     }
   }
