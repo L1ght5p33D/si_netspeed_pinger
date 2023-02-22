@@ -44,6 +44,8 @@ app.*.map.json
 /android/app/release
 
 # Extra ignorables
+ios/
+android/
 web/
 linux/
 macos/

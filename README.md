@@ -1,4 +1,3 @@
-# si_netspeed
+# netspeed_si
 
-A network speed diagnostic written with Flutter
-
+Network pinger for testing connection speed

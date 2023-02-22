@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:async';
 import 'package:easyping/easyping.dart';
-import 'package:si_netspeed/netspeed_styles.dart';
-import 'package:si_netspeed/netspeed_globals.dart';
+import 'package:netspeed_si/netspeed_styles.dart';
+import 'package:netspeed_si/netspeed_globals.dart';
 
 void main() async {
   print("Flutter main init");
@@ -70,9 +70,6 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
 
   Widget build(BuildContext context) {
     gss = MediaQuery.of(context).size;
-    if (custom_ping_host != test_domain_string) {
-      test_domain_string = custom_ping_host;
-    }
 
     print("Test ping domain  ::: ");
     print(test_domain_string);
@@ -85,7 +82,11 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
       dd_val = "ATT";
     } else if (test_domain_string == "multiple") {
       dd_val = "Multiple";
-    } else {
+    } else if(run_multi != true && show_other_host_input == false) {
+      dd_val = "Google";
+      test_domain_string = "www.google.com";
+    }
+    else if (show_other_host_input == true) {
       dd_val = "Other Host";
     }
 
@@ -95,9 +96,10 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
         appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Center(
-              child: Text("NetSpeed", style: config_title_style),
+              child: Text("NetSpeed SI", style: config_title_style),
             )),
         body: Container(
+          padding: EdgeInsets.symmetric(horizontal: gss!.width*.04),
           color: Colors.blueGrey[900],
           height: gss!.height * .97,
           child: ListView(
@@ -121,7 +123,6 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                         value: dd_val,
                         items: dditems,
                         onChanged: (val) {
-                          custom_ping_host = val;
                           setState(() {
                             run_multi = false;
                             show_other_host_input = false;
@@ -139,13 +140,11 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                           if (val == "Other Host") {
                             setState(() {
                               show_other_host_input = true;
-                              custom_ping_host = "";
                               test_domain_string = "";
                             });
                           }
                           setState(() {
                             dd_val = val;
-                            custom_ping_host = test_domain_string;
                           });
                         },
                       ))),
@@ -172,7 +171,6 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                             onSubmitted: (val) {
                               setState(() {
                                 test_domain_string = val;
-                                custom_ping_host = test_domain_string;
                               });
                             },
                           ))
@@ -195,7 +193,6 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                   if (run_multi == true) {
                     setState(() {
                       test_domain_string = "multiple";
-                      custom_ping_host = "multiple";
                       show_other_host_input = false;
                       dd_val = "Multiple";
                     });
@@ -203,7 +200,6 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                   if (run_multi == false) {
                     test_domain_string = dd_val;
                     if (dd_val != "Other Host") {
-                      custom_ping_host = dd_val;
                     }
                     if (dd_val == "Other Host") {
                       show_other_host_input = true;
