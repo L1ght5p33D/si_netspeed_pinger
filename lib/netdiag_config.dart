@@ -3,7 +3,6 @@ import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
 import 'package:netspeed_si/netdiag_test.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netspeed_si/nsas.dart';
 import 'package:netspeed_si/tests_log.dart';
 
@@ -149,10 +148,23 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
   void initState() {
     Future.delayed(Duration.zero,(){
       storage.ready.then((res){
-        setState(() {
-          gstorage = storage;
-          nsas!.test_log = storage.getItem('test_log.json');
-        });
+        gstorage = storage;
+        nsas!.test_log = storage.getItem('test_log.json');
+        nsas!.test_desc_log = storage.getItem('test_desc_log.json');
+        Map set_test_log = {};
+        Map set_desc_test_log = {};
+        if (nsas!.test_log == null){
+
+          storage.setItem("test_log.json", set_test_log);
+          nsas!.test_log = set_test_log;
+        }
+        if (nsas!.test_desc_log == null){
+
+          storage.setItem("test_desc_log.json", set_desc_test_log);
+          nsas!.test_desc_log = set_desc_test_log;
+        }
+        asw!.update_logs_state();
+        asw!.update_desc_logs_state();
       });
     });
     super.initState();

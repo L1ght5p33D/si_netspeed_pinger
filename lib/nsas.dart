@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class AppState{
   var test_log;
+  var test_desc_log;
 }
 
 class InheritedNSAS extends InheritedWidget {
@@ -43,9 +44,15 @@ class InheritedWrapper extends StatefulWidget {
 
 class InheritedWrapperState extends State<InheritedWrapper> {
 
-  void update_logs_state(new_logs) {
+  void update_logs_state() {
     setState(() {
-      state!.test_log = new_logs;
+      state!.test_log;
+    });
+  }
+
+  void update_desc_logs_state() {
+    setState(() {
+      state!.test_desc_log;
     });
   }
 

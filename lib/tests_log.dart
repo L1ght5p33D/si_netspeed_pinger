@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netspeed_si/nsas.dart';
 import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:localstorage/localstorage.dart';
@@ -16,6 +15,10 @@ class TestLogPage extends StatefulWidget {
 
 class _TestLogPageState extends State<TestLogPage> {
 bool edit_logs = false;
+bool show_edit = false;
+int? edit_idx ;
+String? input_desc_val;
+
   InheritedWrapperState? asw;
   AppState? nsas;
   @override
@@ -23,6 +26,7 @@ bool edit_logs = false;
 
     asw = InheritedWrapper.of(context);
     nsas = asw!.state!;
+
 
     show_delete_dialog() {
       showDialog<void>(
@@ -47,7 +51,10 @@ bool edit_logs = false;
                       GestureDetector(
                           onTap: () {
                             gstorage!.setItem("test_log.json", {});
-                            asw!.update_logs_state({});
+                            nsas!.test_log = {};
+                            nsas!.test_desc_log = {};
+                            asw!.update_logs_state();
+                            asw!.update_desc_logs_state();
                             Navigator.of(context).pop();
                             // Navigator.of(context).pop();
                           },
@@ -93,6 +100,8 @@ bool edit_logs = false;
         },
       );
     }
+
+
     if (nsas!.test_log == null){
       return SafeArea(child:
       Scaffold(
@@ -136,21 +145,94 @@ bool edit_logs = false;
                           child:
                           Container(
                               color: Colors.blueGrey[900],
-                              height: gss!.height*.1,
+                              height:
+                              (edit_idx != idx &&
+                                  nsas!.test_desc_log.containsKey(nsas!.test_log.keys.elementAt(idx)) )?
+                              gss!.height*.2:
+                              (edit_idx == idx &&
+                                  nsas!.test_desc_log.containsKey(nsas!.test_log.keys.elementAt(idx)) )?
+                                  gss!.height*.3:
+                              (edit_idx == idx)?
+                              gss!.height*.2:
+                              gss!.height*.1,
                               child:
+                                  Column(children:[
                               Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children:[
-                                    edit_logs == true?Icon(Icons.edit):Container(),
-                              Center(child:Text( "test " +(idx + 1).toString() +" ::: " +
-                                  nsas!.test_log[nsas!.test_log.keys.elementAt(idx)].toString() + "ms" ) ),
+                                    (edit_logs == true && idx != edit_idx)?
+                                    GestureDetector(
+                                      onTap: (){
+                                        setState(() {
+                                          show_edit = true;
+                                          edit_idx = idx;
+                                        });
+
+                                      },
+                                    child:Icon(Icons.edit)):
+                                    edit_idx == idx?
+                                    GestureDetector(
+                                        onTap: (){
+                                          setState(() {
+                                            show_edit = false;
+                                            edit_idx = null;
+                                          });
+
+                                          if (input_desc_val != null){
+                                            print(input_desc_val);
+                                            setState(() {
+                                            nsas!.test_desc_log[nsas!.test_log.keys.elementAt(idx)]
+                                            = input_desc_val;
+                                            });
+                                            storage.setItem('test_desc_log.json',nsas!.test_desc_log);
+                                            asw!.update_desc_logs_state();
+
+                                          }
+
+                                        },
+                                        child:Icon(Icons.check)):
+                                    Container(),
+                             Container(
+                                 height: gss!.height*.1,
+                                 child: Center(child:Text( "test " +(idx + 1).toString() +" ::: " +
+                                  nsas!.test_log[nsas!.test_log.keys.elementAt(idx)].toString() + "ms" ) )),
 
                                     edit_logs == true?GestureDetector(
                                       onTap: (){
-
-
+                                        nsas!.test_log.remove(nsas!.test_log.keys.elementAt(idx));
+                                        gstorage!.setItem("test_log.json", nsas!.test_log);
+                                        asw!.update_logs_state();
                                       },
                                     child:Icon(Icons.delete_outline_outlined)): Container()
+                                  ]),
+
+                                    nsas!.test_desc_log[nsas!.test_log.keys.elementAt(idx)] != null?
+                                    Container(
+                                        height: gss!.height*.1,
+                                        child: Center(child:Text("Desc: " +
+                                            nsas!.test_desc_log[nsas!.test_log.keys.elementAt(idx)].toString() ) )): Container(),
+
+                                    edit_idx == idx?
+                                    Container(
+                                        height: gss!.height*.1,child:
+                                    TextField(
+                                      style: TextStyle(fontSize: gss!.width*.04),
+                                      maxLength:(gss!.width/ (gss!.width*.04)).toInt(),
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.tealAccent, width: gss!.width*.01),
+                                        ),
+                                      )
+                                      ,
+                                      onChanged: (String val){
+                                        print("change");
+                                        setState(() {
+                                          input_desc_val = val;
+                                        });
+
+                                      },
+                                    )):Container()
+
                                   ])
                     ));
                   }))));
