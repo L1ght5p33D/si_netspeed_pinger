@@ -12,11 +12,11 @@ class NetDiag_Settings extends StatefulWidget {
 class _NetDiag_SettingsState extends State<NetDiag_Settings> {
 
   bool theme_switch_val = true;
-  var ps_dd_selected;
+  var ps_dd_val = LoadingScreenOption.normal;
 
   List<DropdownMenuItem> ps_dd_items = [
-    DropdownMenuItem(child: Text("Normal"), value: "normal",),
-    DropdownMenuItem(child: Text("Turtle"), value: "turtle")
+    DropdownMenuItem(child: Text("Normal"), value: LoadingScreenOption.normal,),
+    DropdownMenuItem(child: Text("Turtle"), value: LoadingScreenOption.turtle)
 
   ];
   InheritedWrapperState? asw;
@@ -26,6 +26,11 @@ class _NetDiag_SettingsState extends State<NetDiag_Settings> {
 
     asw = InheritedWrapper.of(context);
     nsas = asw!.state!;
+    if (nsas!.app_brightness == Brightness.light){
+      theme_switch_val = false;
+    }
+      ps_dd_val = nsas!.loading_screen_option;
+
 
     return SafeArea(child: Scaffold(
       appBar: AppBar(title:Text("Settings")),
@@ -54,12 +59,16 @@ class _NetDiag_SettingsState extends State<NetDiag_Settings> {
         ),
 
         ListTile(title:
-        Row(children: [Text("Ping screen"),
-        DropdownButton(items: ps_dd_items, onChanged: (val){
-
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [Text("Ping loading screen"),
+        DropdownButton(items: ps_dd_items,
+            value: ps_dd_val,
+            onChanged: (val){
             setState(() {
-
+              ps_dd_val = val;
             });
+            nsas!.loading_screen_option = val;
         })
         ])
         )

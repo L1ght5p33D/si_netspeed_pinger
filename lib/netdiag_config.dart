@@ -157,7 +157,7 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                       ),
                       child: DropdownButton(
                         value: dd_val,
-                        items: dditems,
+                        items: dditems(nsas!.app_brightness),
                         onChanged: (val) {
                           setState(() {
                             run_multi = false;
@@ -259,10 +259,10 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
               GestureDetector(
                   onTap: () {
                     if (term_agree == false && user_has_ever_agreed == false) {
-                     show_terms_dialog(context);
+                     show_terms_dialog(context, nsas!.app_brightness);
                     }
                     else  if (dd_val == "Other Host" && test_domain_string == ""){
-                      show_hostempty_dialog(context);
+                      show_hostempty_dialog(context, nsas!.app_brightness);
                     }
                     else {
                       Navigator.push(

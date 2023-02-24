@@ -9,6 +9,12 @@ TextStyle config_title_style = TextStyle(
     fontFamily: 'MontserratSubrayada');
 TextStyle config_dom_style = TextStyle(
     fontSize: 22.0,
+    color: Colors.black,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 1,
+    fontFamily: 'MontserratSubrayada');
+TextStyle config_dom_style_dark = TextStyle(
+    fontSize: 22.0,
     color: Colors.white,
     fontWeight: FontWeight.w600,
     letterSpacing: 1,

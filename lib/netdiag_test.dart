@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easyping/easyping.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
 import 'package:netspeed_si/netdiag_results.dart';
+import 'package:netspeed_si/nsas.dart';
 
 class NetDiagTest extends StatefulWidget {
   NetDiagTest({Key? key, this.thost, this.run_multi}) : super(key: key);
@@ -93,7 +94,13 @@ class _NetDiagTestState extends State<NetDiagTest> {
     });
   }
 
+  InheritedWrapperState? asw;
+  AppState? nsas;
+  @override
   Widget build(BuildContext context) {
+
+    asw = InheritedWrapper.of(context);
+    nsas = asw!.state!;
 
     String show_host = "";
 
@@ -118,10 +125,15 @@ class _NetDiagTestState extends State<NetDiagTest> {
                             Container(
                                 height: gss!.height * .94,
                                 child: Container(
-                                    child: Image.asset(
+                                    child:
+                                        nsas!.loading_screen_option == LoadingScreenOption.normal?
+                                          Center(child:CircularProgressIndicator()):
+                                    Image.asset(
                                       "assets/cloud_turtle_balloon_animation_reverse_scale.gif",
                                       fit: BoxFit.cover,
-                                    ))),
+                                    )
+                                )
+                            ),
                           ])),
                       Container(
                           height: gss!.height * .95,
@@ -183,7 +195,8 @@ class _NetDiagTestState extends State<NetDiagTest> {
                                   child: Center(
                                       child: Text(
                                         "SigmaInfinitus",
-                                        style: TextStyle(fontFamily: 'MontserratSubrayada'),
+                                        style: TextStyle(fontFamily: 'MontserratSubrayada',
+                                        color: Colors.white),
                                       )))
                             ],
                           ))

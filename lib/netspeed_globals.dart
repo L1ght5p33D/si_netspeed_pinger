@@ -14,35 +14,47 @@ List host_name_list = ["Google DNS", "Cloudflare DNS", "AT&T DNS"];
 final LocalStorage storage = new LocalStorage('test_log.json');
 LocalStorage? gstorage;
 
-List<DropdownMenuItem> dditems = [
-  DropdownMenuItem(
-      value: "Google DNS",
-      child: Text(
-        "Google",
-        style: config_dom_style,
-      )),
-  DropdownMenuItem(
-      value: "Cloudflare DNS",
-      child: Text(
-        "Cloudflare",
-        style: config_dom_style,
-      )),
-  DropdownMenuItem(
-      value: "ATT DNS",
-      child: Text(
-        "ATT",
-        style: config_dom_style,
-      )),
-  DropdownMenuItem(
-      value: "Other Host",
-      child: Text(
-        "Other Host",
-        style: config_dom_style,
-      )),
-  DropdownMenuItem(
-      value: "Multiple",
-      child: Text(
-        "",
-        style: config_dom_style,
-      )),
-];
+enum LoadingScreenOption {
+  normal,
+  turtle
+}
+
+List<DropdownMenuItem> dditems(app_brightness) {
+  TextStyle ddts = config_dom_style;
+  if (app_brightness == Brightness.dark){
+    ddts = config_dom_style_dark;
+  }
+
+  return [
+    DropdownMenuItem(
+        value: "Google DNS",
+        child: Text(
+          "Google",
+          style: ddts,
+        )),
+    DropdownMenuItem(
+        value: "Cloudflare DNS",
+        child: Text(
+          "Cloudflare",
+          style: ddts,
+        )),
+    DropdownMenuItem(
+        value: "ATT DNS",
+        child: Text(
+          "ATT",
+          style: ddts,
+        )),
+    DropdownMenuItem(
+        value: "Other Host",
+        child: Text(
+          "Other Host",
+          style: ddts,
+        )),
+    DropdownMenuItem(
+        value: "Multiple",
+        child: Text(
+          "",
+          style: ddts,
+        )),
+  ];
+}

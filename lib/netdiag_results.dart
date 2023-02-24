@@ -4,6 +4,7 @@ import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/speedtimer.dart';
 import 'package:netspeed_si/netdiag_config.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
+import 'package:netspeed_si/nsas.dart';
 
 class NetDiagResults extends StatefulWidget {
   NetDiagResults({Key? key, this.thost, this.st_result}) : super(key: key);
@@ -24,7 +25,13 @@ class _NetDiagResultsState extends State<NetDiagResults> {
     print("NetDiagResults dispose");
   }
 
+  InheritedWrapperState? asw;
+  AppState? nsas;
+  @override
   Widget build(BuildContext context) {
+
+    asw = InheritedWrapper.of(context);
+    nsas = asw!.state!;
     String time_slug = DateTime.now().millisecondsSinceEpoch.toString();
     String time_slug_short = time_slug.substring(0, time_slug.length -4);
     Map test_table = gstorage!.getItem("test_log.json");
@@ -49,7 +56,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
               child: Container(
                 height: gss!.height,
                 child: Container(
-                    color: Colors.blueGrey[900],
+                    color:
+                    Colors.blueGrey[900],
                     width: gss!.width,
                     height: gss!.height ,
                     child: Stack(children: [
@@ -83,7 +91,7 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                                   widget.st_result.toString() +
                                                       " ms" ??
                                                       "",
-                                                  style: app_title_style,
+                                                  style: config_desc_style,
                                                 ))),
                                         Container(height: gss!.height*.03,),
                                         Speed_Timer_Img(time: widget.st_result),
@@ -127,7 +135,9 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                                             BorderRadius.circular(
                                                                 gss!.width * .03),
                                                             child: Container(
-                                                                color: Colors.white,
+                                                                color:
+                                                                nsas!.app_brightness == Brightness.dark?
+                                                                Colors.white: Colors.black,
                                                                 padding: EdgeInsets.all(
                                                                     gss!.width * .005),
                                                                 child: ClipRRect(
@@ -137,8 +147,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                                                         gss!.width *
                                                                             .03),
                                                                     child: Container(
-                                                                        color: Colors
-                                                                            .blueGrey[900],
+                                                                        color: nsas!.app_brightness == Brightness.dark?
+                                                                        Colors.blueGrey[900]: Colors.white,
                                                                         padding:
                                                                         EdgeInsets.all(
                                                                             0.0),
@@ -150,8 +160,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                                                           child: Text(
                                                                             "Run Again",
                                                                             style: TextStyle(
-                                                                                color: Colors
-                                                                                    .white,
+                                                                                color: nsas!.app_brightness == Brightness.dark?Colors
+                                                                                    .white: Colors.black,
                                                                                 fontFamily:
                                                                                 'MontserratSubrayada'),
                                                                           ),
@@ -175,7 +185,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                                           BorderRadius.circular(
                                                               gss!.width * .03),
                                                           child: Container(
-                                                              color: Colors.white,
+                                                              color:nsas!.app_brightness == Brightness.dark?
+                                                              Colors.white: Colors.black,
                                                               padding: EdgeInsets.all(
                                                                   gss!.width * .005),
                                                               child: ClipRRect(
@@ -183,8 +194,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                                                   BorderRadius.circular(
                                                                       gss!.width * .03),
                                                                   child: Container(
-                                                                      color: Colors
-                                                                          .blueGrey[900],
+                                                                      color: nsas!.app_brightness == Brightness.dark?
+                                                                      Colors.blueGrey[900]: Colors.white,
                                                                       padding:
                                                                       EdgeInsets.all(
                                                                           0.0),
@@ -196,8 +207,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                                                         child: Text(
                                                                           "Home",
                                                                           style: TextStyle(
-                                                                              color: Colors
-                                                                                  .white,
+                                                                              color:nsas!.app_brightness == Brightness.dark? Colors
+                                                                                  .white: Colors.black,
                                                                               fontFamily:
                                                                               'MontserratSubrayada'),
                                                                         ),
@@ -219,7 +230,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                                   child: Center(
                                       child: Text(
                                         "SigmaInfinitus",
-                                        style: TextStyle(fontFamily: 'MontserratSubrayada'),
+                                        style: TextStyle(fontFamily: 'MontserratSubrayada',
+                                        color: Colors.white),
                                       )))
                             ],
                           ))

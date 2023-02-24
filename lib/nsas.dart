@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:netspeed_si/netspeed_globals.dart';
 
 class AppState{
   var test_log;
   var test_desc_log;
 
   Brightness app_brightness = Brightness.dark;
+  LoadingScreenOption loading_screen_option = LoadingScreenOption.normal;
 }
 
 class InheritedNSAS extends InheritedWidget {
