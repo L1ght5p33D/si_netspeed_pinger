@@ -46,13 +46,18 @@ class _Test_HistoryState extends State<Test_History> {
             borderRadius: BorderRadius.circular(4.0),
             child: Container(
                 padding: EdgeInsets.all(2.0),
-                color: Colors.white,
+                color:
+                nsas!.app_brightness == Brightness.dark?
+                Colors.white: Colors.black,
                 child: Container(
-                    color: Colors.blueGrey[800],
+                    color:
+                    nsas!.app_brightness == Brightness.dark?
+                    Colors.blueGrey[800]: Colors.white,
                     height: gss!.height * .09,
                     width: gss!.width * .77,
                     child: Center(
-                      child: Text("Test Log"),
+                      child: Text("Test Log", style: TextStyle(color:
+                nsas!.app_brightness == Brightness.dark?Colors.white: Colors.black),),
                     )))));
   }
 }

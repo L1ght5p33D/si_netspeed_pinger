@@ -107,12 +107,12 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
             )),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: gss!.width*.04),
-          color: Colors.blueGrey[900],
+          // color: Colors.blueGrey[900],
           height: gss!.height * .97,
           child: ListView(
             children: <Widget>[
               Container(
-                color: Colors.blueGrey[900],
+                // color: Colors.blueGrey[900],
                 height: gss!.height * .01,
               ),
               Container(
@@ -135,12 +135,12 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                 controlAffinity: ListTileControlAffinity.trailing,
               ),
               Container(
-                color: Colors.blueGrey[900],
+                // color: Colors.blueGrey[900],
                 height: gss!.height * .03,
               ),
               Test_History(),
               Container(
-                color: Colors.blueGrey[900],
+                // color: Colors.blueGrey[900],
                 height: gss!.height * .04,
               ),
 
@@ -151,7 +151,7 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                           gss!.width * .03, gss!.width * .03, gss!.width * .03),
                       decoration: BoxDecoration(
                         border: Border.all(
-                            color: Colors.white,
+                            color: nsas!.app_brightness == Brightness.dark? Colors.white: Colors.black,
                             width: gss!.width * .01,
                             style: BorderStyle.solid),
                       ),
@@ -185,13 +185,13 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                         },
                       ))),
               Container(
-                color: Colors.blueGrey[900],
+                // color: Colors.blueGrey[900],
                 height: gss!.height * .05,
               ),
               show_other_host_input == true
                   ? Column(children: [
                 Container(
-                  color: Colors.blueGrey[900],
+                  // color: Colors.blueGrey[900],
                   height: gss!.height * .05,
                   child: Center(child: Text("Enter domain to ping")),
                 ),
@@ -203,7 +203,9 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                             width: gss!.width * .01,
                             style: BorderStyle.solid)),
                     child: TextField(
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color:
+                      nsas!.app_brightness == Brightness.dark?
+                      Colors.white: Colors.black),
                       onSubmitted: (val) {
                         setState(() {
                           test_domain_string = val;
@@ -277,17 +279,24 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                       borderRadius: BorderRadius.circular(4.0),
                       child: Container(
                           padding: EdgeInsets.all(2.0),
-                          color: Colors.white,
+                          color:
+                          nsas!.app_brightness == Brightness.dark?
+                          Colors.white: Colors.black,
                           child: Container(
-                              color: Colors.blueGrey[800],
+                              color:
+                              nsas!.app_brightness == Brightness.dark?
+                              Colors.blueGrey[800]: Colors.white,
                               height: gss!.height * .09,
                               width: gss!.width * .77,
                               child: Center(
-                                child: Text("Start NetSpeed Test"),
+                                child: Text("Start NetSpeed Test",
+                                  style: TextStyle(color:
+                                  nsas!.app_brightness == Brightness.dark?
+                                  Colors.white: Colors.black),),
                               ))))),
 
               Container(
-                color: Colors.blueGrey[900],
+                // color: Colors.blueGrey[900],
                 height: gss!.height * .1,
               ),
 

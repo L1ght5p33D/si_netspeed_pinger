@@ -23,7 +23,7 @@ class NetSpeedApp extends StatelessWidget {
       title: 'SI NetSpeed',
       theme: ThemeData(
         brightness: nsas!.app_brightness,
-        scaffoldBackgroundColor: Colors.blueGrey[900]
+        // scaffoldBackgroundColor: Colors.blueGrey[900]
       ),
       home: NetDiagConfig(),
     );

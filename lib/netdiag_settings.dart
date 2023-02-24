@@ -28,7 +28,8 @@ class _NetDiag_SettingsState extends State<NetDiag_Settings> {
     nsas = asw!.state!;
 
     return SafeArea(child: Scaffold(
-      body:Container(
+      appBar: AppBar(title:Text("Settings")),
+        body:Container(
 
         height: gss!.height,
       child: ListView(children: [
@@ -37,8 +38,14 @@ class _NetDiag_SettingsState extends State<NetDiag_Settings> {
             onChanged: (bool val){
               setState(() {
                 theme_switch_val = val;
-
               });
+              if (val == false) {
+                nsas!.app_brightness = Brightness.light;
+              }
+              if (val == true) {
+                nsas!.app_brightness = Brightness.dark;
+              }
+              asw!.update_state();
             },
             title:
         Row(children: [

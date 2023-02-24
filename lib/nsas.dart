@@ -58,6 +58,10 @@ class InheritedWrapperState extends State<InheritedWrapper> {
     });
   }
 
+  void update_state(){
+    setState(() {state!;});
+  }
+
   AppState? state;
 
   @override
