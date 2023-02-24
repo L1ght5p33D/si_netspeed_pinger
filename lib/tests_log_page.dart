@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netspeed_si/nsas.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
-
+import 'package:netspeed_si/dialogs.dart';
 
 class TestLogPage extends StatefulWidget {
   TestLogPage({Key? key}) : super(key: key);
@@ -19,85 +19,23 @@ String? input_desc_val;
 
   InheritedWrapperState? asw;
   AppState? nsas;
+
+  clear_log(){
+    gstorage!.setItem("test_log.json", {});
+    nsas!.test_log = {};
+    nsas!.test_desc_log = {};
+    asw!.update_logs_state();
+    asw!.update_desc_logs_state();
+    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
 
     asw = InheritedWrapper.of(context);
     nsas = asw!.state!;
 
-
-    show_delete_dialog() {
-      showDialog<void>(
-        context: context,
-        barrierDismissible: true, // user must tap button!
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.white54,
-            contentPadding: EdgeInsets.all(gss!.width * .01),
-            // title: Text('AlertDialog Title'),
-            content: Container(
-                color: Colors.blueGrey[900],
-                padding: EdgeInsets.all(gss!.width * .04),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                          'Are you sure you want to clear the test log?'),
-                      Container(
-                        height: gss!.width * .04,
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            gstorage!.setItem("test_log.json", {});
-                            nsas!.test_log = {};
-                            nsas!.test_desc_log = {};
-                            asw!.update_logs_state();
-                            asw!.update_desc_logs_state();
-                            Navigator.of(context).pop();
-                            // Navigator.of(context).pop();
-                          },
-                          child: ClipRRect(
-                              borderRadius:
-                              BorderRadius.circular(4.0),
-                              child: Container(
-                                  padding: EdgeInsets.all(2.0),
-                                  color: Colors.white,
-                                  child: Container(
-                                      color:
-                                      Colors.blueGrey[800],
-                                      height:
-                                      gss!.height * .047,
-                                      width: gss!.width * .3,
-                                      child: Center(
-                                        child: Text("Yes"),
-                                      ))))),
-                      Container(
-                        height: gss!.height * .05,
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: ClipRRect(
-                              borderRadius:
-                              BorderRadius.circular(4.0),
-                              child: Container(
-                                  padding: EdgeInsets.all(2.0),
-                                  color: Colors.white,
-                                  child: Container(
-                                      color:
-                                      Colors.blueGrey[800],
-                                      height:
-                                      gss!.height * .047,
-                                      width: gss!.width * .3,
-                                      child: Center(
-                                        child: Text("No"),
-                                      ))))),
-                    ])),
-          );
-        },
-      );
-    }
 
 
     if (nsas!.test_log == null){
@@ -128,7 +66,7 @@ String? input_desc_val;
               GestureDetector(
                 onTap: (){
 
-                  show_delete_dialog();
+                  show_delete_dialog(context, nsas!.app_brightness, clear_log);
                 },
                 child: Icon(Icons.delete_sweep_outlined),)
 
@@ -139,13 +77,15 @@ String? input_desc_val;
                   itemBuilder: (context, idx){
 
                     // reverse order real quick
-                    idx = nsas!.test_log.keys().length - idx - 1;
+                    idx = nsas!.test_log.keys.length - idx - 1;
                     return
                       Padding(
                           padding: EdgeInsets.symmetric(vertical: gss!.width*.02),
                           child:
                           Container(
-                              color: Colors.blueGrey[900],
+                              color:
+                              nsas!.app_brightness == Brightness.dark?
+                              Colors.blueGrey[800]: Colors.grey[200],
                               height:
                               (edit_idx != idx &&
                                   nsas!.test_desc_log.containsKey(nsas!.test_log.keys.elementAt(idx)) )?

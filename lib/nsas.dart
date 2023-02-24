@@ -6,7 +6,7 @@ class AppState{
   var test_log;
   var test_desc_log;
 
-  Brightness app_brightness = Brightness.dark;
+  Brightness app_brightness = Brightness.light;
   LoadingScreenOption loading_screen_option = LoadingScreenOption.normal;
 }
 

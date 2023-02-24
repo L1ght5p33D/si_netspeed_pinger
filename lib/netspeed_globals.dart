@@ -21,9 +21,6 @@ enum LoadingScreenOption {
 
 List<DropdownMenuItem> dditems(app_brightness) {
   TextStyle ddts = config_dom_style;
-  if (app_brightness == Brightness.dark){
-    ddts = config_dom_style_dark;
-  }
 
   return [
     DropdownMenuItem(

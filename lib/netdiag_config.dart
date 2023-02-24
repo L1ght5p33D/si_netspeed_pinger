@@ -106,11 +106,14 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
             ]
             )),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: gss!.width*.04),
           // color: Colors.blueGrey[900],
           height: gss!.height * .97,
           child: ListView(
             children: <Widget>[
+              Container(
+          padding: EdgeInsets.symmetric(horizontal: gss!.width*.04),
+              child:Column(children:[
+
               Container(
                 // color: Colors.blueGrey[900],
                 height: gss!.height * .01,
@@ -300,7 +303,18 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
                 height: gss!.height * .1,
               ),
 
-            ],
+              ])),
+              Container(
+                          width: gss!.width,
+                          color: Colors.blueGrey[900],
+                          child: Center(
+                              child: Text(
+                                "SigmaInfinitus",
+                                style: TextStyle(fontFamily: 'MontserratSubrayada',
+                                    color: Colors.white),
+                              )))
+
+          ],
           ),
         ));
   }

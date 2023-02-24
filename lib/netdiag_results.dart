@@ -57,7 +57,8 @@ class _NetDiagResultsState extends State<NetDiagResults> {
                 height: gss!.height,
                 child: Container(
                     color:
-                    Colors.blueGrey[900],
+                        nsas!.app_brightness == Brightness.dark?
+                    Colors.blueGrey[900]: Colors.grey[600],
                     width: gss!.width,
                     height: gss!.height ,
                     child: Stack(children: [
