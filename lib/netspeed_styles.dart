@@ -3,12 +3,12 @@ import 'package:netspeed_si/netspeed_globals.dart';
 
 
 TextStyle config_title_style = TextStyle(
-    fontSize: 32.0,
+    fontSize: 22.0,
     fontWeight: FontWeight.w900,
     letterSpacing: 1,
     fontFamily: 'MontserratSubrayada');
 TextStyle config_dom_style = TextStyle(
-    fontSize: 26.0,
+    fontSize: 22.0,
     color: Colors.white,
     fontWeight: FontWeight.w600,
     letterSpacing: 1,

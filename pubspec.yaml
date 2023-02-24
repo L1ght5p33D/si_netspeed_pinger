@@ -1,7 +1,7 @@
 name: netspeed_si
 description: Ping based network tester
 
-version: 1.0.0+1
+version: 2.0.0+1
 
 environment:
   sdk: '>=2.19.0-139.0.dev <3.0.0'

@@ -137,6 +137,9 @@ String? input_desc_val;
               child: ListView.builder(
                   itemCount: nsas!.test_log.keys.length,
                   itemBuilder: (context, idx){
+
+                    // reverse order real quick
+                    idx = nsas!.test_log.keys().length - idx - 1;
                     return
                       Padding(
                           padding: EdgeInsets.symmetric(vertical: gss!.width*.02),

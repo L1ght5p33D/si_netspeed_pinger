@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class AppState{
   var test_log;
   var test_desc_log;
+
+  Brightness app_brightness = Brightness.dark;
 }
 
 class InheritedNSAS extends InheritedWidget {

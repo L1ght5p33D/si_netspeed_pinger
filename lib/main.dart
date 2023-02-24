@@ -11,12 +11,19 @@ void main() async {
 }
 
 class NetSpeedApp extends StatelessWidget {
+  InheritedWrapperState? asw;
+  AppState? nsas;
+  @override
   Widget build(BuildContext context) {
+
+    asw = InheritedWrapper.of(context);
+    nsas = asw!.state!;
+
     return MaterialApp(
       title: 'SI NetSpeed',
       theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: Colors.white70,
+        brightness: nsas!.app_brightness,
+        scaffoldBackgroundColor: Colors.blueGrey[900]
       ),
       home: NetDiagConfig(),
     );

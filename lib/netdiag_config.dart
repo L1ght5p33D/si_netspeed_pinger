@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:netspeed_si/netspeed_styles.dart';
 import 'package:netspeed_si/netspeed_globals.dart';
 import 'package:netspeed_si/netdiag_test.dart';
 import 'package:netspeed_si/nsas.dart';
 import 'package:netspeed_si/dialogs.dart';
 import 'package:netspeed_si/test_history.dart';
+import 'package:netspeed_si/netdiag_settings.dart';
 
 class NetDiagConfig extends StatefulWidget {
   _NetDiagConfigState createState() => _NetDiagConfigState();
@@ -81,8 +83,27 @@ class _NetDiagConfigState extends State<NetDiagConfig> {
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Center(
+            title: Stack(children:[
+
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[Container(
               child: Text("NetSpeed SI", style: config_title_style),
+            )]),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                GestureDetector(onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NetDiag_Settings()),
+                  );
+                },
+                child:Icon(Icons.settings_outlined))
+              ],)
+            ]
             )),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: gss!.width*.04),
